@@ -1,0 +1,28 @@
+.layout {
+    height: 100vh;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    .header {
+        height: 60px;
+        background-color: #ffffff55;
+        .pages {
+            .link {
+                height: 60px;
+                color: #666;
+                line-height: 60px;
+                font-weight: 500;
+                text-decoration: none;
+                transition: 0.3s;
+                &:hover {
+                    background-color: #ffffff88;
+                }
+                &.active {
+                    background-color: #59d257;
+                }
+            }
+        }
+    }
+    .content {
+    }
+}
