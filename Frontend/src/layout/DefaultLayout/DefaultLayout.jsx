@@ -1,13 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import { privateRoutes } from '../routes/routes';
-import background from '../assets/background.jpg';
-import './Layout.scss';
+import { privateRoutes } from '../../routes/routes.jsx';
 
-function Layout({ children }) {
+import background from '../../assets/background.jpg';
+import './DefaultLayout.scss';
+
+function DefaultLayout({ children }) {
     return (
-        <div className="layout" style={{ backgroundImage: `url(${background})` }}>
-            <div className="header d-flex">
-                <div className="pages m-auto d-flex">
+        <div className="default-layout" style={{ backgroundImage: `url(${background})` }}>
+            <div className="header d-flex mb-3">
+                <div className="pages m-auto  d-flex">
                     {privateRoutes.map(
                         (route, index) =>
                             route.title && (
@@ -29,4 +30,4 @@ function Layout({ children }) {
     );
 }
 
-export default Layout;
+export default DefaultLayout;

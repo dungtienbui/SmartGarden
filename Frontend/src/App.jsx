@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { privateRoutes, publicRoutes } from './routes/routes';
+import { privateRoutes, publicRoutes } from './routes/routes.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
