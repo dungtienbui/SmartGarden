@@ -1,7 +1,9 @@
-import homeRouter from './home';
+import gardenRouter from './garden';
+import userRouter from './user';
 
 const routes = (app) => {
-    return app.use('/', homeRouter);
+    app.use('/user', userRouter);
+    app.use('/garden', gardenRouter);
 }
 
-module.exports = routes;
+export default routes;

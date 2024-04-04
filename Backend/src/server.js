@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import routes from './routes/index.js';
-import connectDb from './config/connectDb.js';
+import routes from './routes';
+import connectDb from './config/connectDb';
 
 require('dotenv').config()
 

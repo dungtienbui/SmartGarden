@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { getAllGarden } from '../../services/webService';
 
 import './GardenNav.scss';
 
@@ -8,14 +9,25 @@ function GardenNav({ children }) {
     const navigate = useNavigate();
     const [gardenRoutes, setGardenRoutes] = useState([]);
     useEffect(() => {
-        const path = location.pathname.substring(0, location.pathname.lastIndexOf('/'));
-        const res = [
-            { path: path + '/g1', title: 'VƯỜN 1' },
-            { path: path + '/g2', title: 'VUỜN 2' },
-            { path: path + '/g3', title: 'VUỜN 3' },
-        ];
-        setGardenRoutes(res);
-        navigate(res[0].path);
+        const path = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1);
+        const getGardens = async () => {
+            let res = await getAllGarden();
+            let gardens;
+            if (res && res.EC === 0) {
+                gardens = res.DT.map((garden) => {
+                    return { path: path + garden.id.toString(), title: garden.name };
+                });
+            } else {
+                gardens = [
+                    { path: path + '/1', title: 'VƯỜN 1' },
+                    { path: path + '/2', title: 'VUỜN 2' },
+                    { path: path + '/3', title: 'VUỜN 3' },
+                ];
+            }
+            setGardenRoutes(gardens);
+            navigate(gardens[0].path);
+        };
+        getGardens();
     }, []);
     return (
         <div className="row garden-nav-container">

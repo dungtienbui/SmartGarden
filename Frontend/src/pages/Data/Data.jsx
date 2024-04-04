@@ -1,76 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import LiveClock from '../../components/LiveClock/LiveClock';
+import { getNewestData } from '../../services/adafruitService';
+import LiveClock from '../../components/LiveClock';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLightbulb, faDroplet, faLeaf, faTemperatureHigh } from '@fortawesome/free-solid-svg-icons';
-
 import './Data.scss';
 
 function Data() {
-    const [envData, setEnvData] = useState([]);
     const params = useParams();
+    const sampleData = [
+        {
+            title: 'Cường độ ánh sáng',
+            time: '',
+            value: '',
+            icon: <FontAwesomeIcon color="#FFF732" icon={faLightbulb} />,
+        },
+        {
+            title: 'Độ ẩm đất',
+            time: '',
+            value: '',
+            icon: <FontAwesomeIcon color="#44C7FF" icon={faDroplet} />,
+        },
+        {
+            title: 'Độ ẩm không khí',
+            time: '',
+            value: '',
+            icon: <FontAwesomeIcon color="#009957" icon={faLeaf} />,
+        },
+        {
+            title: 'Nhiệt độ',
+            time: '',
+            value: '',
+            icon: <FontAwesomeIcon color="#F32E28" icon={faTemperatureHigh} />,
+        },
+    ];
+    const [envData, setEnvData] = useState(sampleData);
     useEffect(() => {
-        const res1 = [
-            {
-                title: 'Cường độ ánh sáng',
-                time: '20:30:30',
-                value: '30 lux',
-                icon: <FontAwesomeIcon color="#FFF732" icon={faLightbulb} />,
-            },
-            {
-                title: 'Độ ẩm đất',
-                time: '20:30:30',
-                value: '30 %',
-                icon: <FontAwesomeIcon color="#44C7FF" icon={faDroplet} />,
-            },
-            {
-                title: 'Độ ẩm không khí',
-                time: '20:30:30',
-                value: '30 %',
-                icon: <FontAwesomeIcon color="#009957" icon={faLeaf} />,
-            },
-            {
-                title: 'Nhiệt độ',
-                time: '20:30:30',
-                value: '30 %',
-                icon: <FontAwesomeIcon color="#F32E28" icon={faTemperatureHigh} />,
-            },
-        ];
-        const res2 = [
-            {
-                title: 'Cường độ ánh sáng',
-                time: '20:30:30',
-                value: '40 lux',
-                icon: <FontAwesomeIcon color="#FFF732" icon={faLightbulb} />,
-            },
-            {
-                title: 'Độ ẩm đất',
-                time: '20:30:30',
-                value: '32 %',
-                icon: <FontAwesomeIcon color="#44C7FF" icon={faDroplet} />,
-            },
-            {
-                title: 'Độ ẩm không khí',
-                time: '20:30:30',
-                value: '24 %',
-                icon: <FontAwesomeIcon color="#009957" icon={faLeaf} />,
-            },
-            {
-                title: 'Nhiệt độ',
-                time: '20:30:30',
-                value: '26 %',
-                icon: <FontAwesomeIcon color="#F32E28" icon={faTemperatureHigh} />,
-            },
-        ];
-        if (params.gardenId == 'g1') {
-            setEnvData(res1);
-        } else {
-            setEnvData(res2);
-        }
+        const getData = async () => {
+            const raw = await getNewestData(params.gardenId);
+            let data = [...sampleData];
+            data[0] = { ...sampleData[0], time: raw.brightness.time, value: raw.brightness.value };
+            data[1] = { ...sampleData[1], time: raw.humidity1.time, value: raw.humidity1.value };
+            data[2] = { ...sampleData[2], time: raw.humidity2.time, value: raw.humidity2.value };
+            data[3] = { ...sampleData[3], time: raw.temperature.time, value: raw.temperature.value };
+            setEnvData(data);
+        };
+        getData();
+        const intervalId = setInterval(() => getData(), 5000);
+        return () => clearInterval(intervalId);
     }, [params.gardenId]);
+
     return (
         <div className="data-page h-100 px-3 position-relative">
-            <h3 className="title fw-normal text-center py-3">Dữ liệu môi trường</h3>
+            <h3 className="title text-center py-3">Dữ liệu môi trường</h3>
             <div className="env-data px-3">
                 {envData.map((data, index) => (
                     <div className="data-card d-flex p-3 my-2 justify-content-between rounded-4" key={index}>

@@ -11,15 +11,25 @@
             .link {
                 height: var(--header-height);
                 line-height: var(--header-height);
-                color: #555;
+                color: #444;
                 font-weight: 500;
-                text-decoration: none;
                 transition: 0.3s;
                 &:hover {
                     background-color: #ffffff88;
                 }
                 &.active {
-                    background-color: #59d257;
+                    background-color: #56c754;
+                }
+            }
+        }
+        .logout {
+            background-color: #00000044;
+            padding: 0 1.9rem;
+            button {
+                color: white;
+                transition: 0.25s;
+                &:hover {
+                    color: #ea3636;
                 }
             }
         }
