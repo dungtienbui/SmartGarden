@@ -5,17 +5,17 @@ module.exports = {
   	async up (queryInterface, Sequelize) {
      	await queryInterface.bulkInsert('Garden', [
 			{
-				name: 'Garden 1',
+				name: 'Vườn 1',
 				description: 'Main garden',
 				createdAt: "2024-03-03"
 			}, 
 			{
-				name: 'Garden 2',
+				name: 'Vườn 2',
 				description: 'Fake garden',
 				createdAt: "2024-03-03"
 			},
 			{
-				name: 'Garden 3',
+				name: 'Vườn 3',
 				description: 'Fake garden',
 				createdAt: "2024-03-03"
 			}

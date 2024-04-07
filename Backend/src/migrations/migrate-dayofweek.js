@@ -6,7 +6,7 @@ module.exports = {
       day: {
         type: Sequelize.INTEGER
       },
-      scheduleId: {
+      ScheduleId: {
         allowNull: false,
         type: Sequelize.INTEGER
       }

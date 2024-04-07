@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     start: DataTypes.TIME,
     finish: DataTypes.TIME,
     isUsed: DataTypes.BOOLEAN,
-    deviceId: DataTypes.INTEGER
+    DeviceId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Schedule',

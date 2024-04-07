@@ -1,5 +1,11 @@
 import webService from '../services/webService';
 
+const serverErr = {
+    EM: 'error from server',
+    EC: -1,
+    DT: ''
+}
+
 class gardenController {
     async getAllGarden(req, res) {
         try {
@@ -10,11 +16,7 @@ class gardenController {
                 DT: data.DT
             })
         } catch (err) {
-            return res.status(500).json({
-                EM: 'error from server',
-                EC: -1,
-                DT: ''
-            })
+            return res.status(500).json(serverErr)
         }
     }
 };

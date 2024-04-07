@@ -1,29 +1,16 @@
-import userService from '../services/userService';
+import webService from '../services/webService';
 
 const serverErr = {
     EM: 'error from server',
     EC: -1,
     DT: ''
-};
+}
 
-class userController {
-
-    async checkUser(req, res) {
-        try {
-            const data = await userService.checkUser(req.body.username, req.body.password);
-            return res.status(200).json({
-                EM: data.EM,
-                EC: data.EC,
-                DT: data.DT
-            });
-        } catch (err) {
-            return res.status(500).json(serverErr);
-        }
-    };
+class sensorController {
     
-    async login(req, res) {
+    async getLastSavedValue(req, res) {
         try {
-            const data = await userService.login(req.body.username, req.body.password);
+            const data = await webService.getLastSavedValue(req.params.sensorId);
             return res.status(200).json({
                 EM: data.EM,
                 EC: data.EC,
@@ -32,20 +19,33 @@ class userController {
         } catch (err) {
             return res.status(500).json(serverErr);
         }
-    };
+    }
 
-    logout(req, res) {
+    async getAllSensor(req, res) {
         try {
-            userService.logout();
+            const data = await webService.getAllSensor(req.query.gardenId);
             return res.status(200).json({
-                EM: "Logout succeed",
-                EC: 0,
-                DT: ''
-            });
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT
+            })
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    }
+
+    async getSensorInfo(req, res) {
+        try {
+            const data = await webService.getSensorInfo(req.params.sensorId);
+            return res.status(200).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT
+            })
         } catch (err) {
             return res.status(500).json(serverErr);
         }
     }
 };
 
-export default new userController();
+export default new sensorController();

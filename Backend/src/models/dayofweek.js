@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   DayOfWeek.init({
     day: DataTypes.INTEGER,
-    scheduleId: DataTypes.INTEGER
+    ScheduleId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'DayOfWeek',

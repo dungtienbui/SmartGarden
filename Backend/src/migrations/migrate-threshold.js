@@ -21,7 +21,7 @@ module.exports = {
       isUpperBound: {
         type: Sequelize.BOOLEAN
       },
-      gardenId: {
+      GardenId: {
         allowNull: false,
         type: Sequelize.INTEGER
       }

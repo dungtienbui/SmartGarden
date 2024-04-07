@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      deviceId: {
+      DeviceId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },

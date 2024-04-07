@@ -1,8 +1,15 @@
-import db from '../models';
 import adafruitService from './adafruitService';
+import db from '../models';
 import bcrypt from 'bcryptjs';
 const User = db.User;
 const salt = bcrypt.genSaltSync(10);
+require('dotenv').config()
+
+const serviceErr = { 
+    EM: 'Error from service',
+    EC: -2,
+    DT: ''
+}
 
 const hashPassword = (password) =>{
     return bcrypt.hashSync(password, salt);
@@ -28,22 +35,19 @@ const checkUser = async (username, userpass) => {
         }
     } catch (err){
         console.log(err);
-        return {
-            EM: 'Error from service',
-            EC: -2,
-            DT: ''
-        }
+        return serviceErr
     }
 };
 
 let timerId;
 const login = async (username, userpass) => {
     try {
-        const userinfo = await User.findOne({ where: {username : username} });
+        const userinfo = await User.findOne({ where: {username} });
         if (userinfo) {
             const check = bcrypt.compareSync(userpass, userinfo.password);
             if (check) {
-                timerId = setInterval(async () => {await adafruitService.getNewestData()}, 2000)
+                adafruitService.getNewestData();
+                timerId = setInterval(async () => {await adafruitService.getNewestData()}, process.env.TIME_INTERVAL)
                 return {
                     EM: 'Login succeed',
                     EC: 0,
@@ -58,11 +62,7 @@ const login = async (username, userpass) => {
         }
     } catch (err){
         console.log(err);
-        return {
-            EM: 'Error from service',
-            EC: -2,
-            DT: ''
-        }
+        return serviceErr
     }
 };
 

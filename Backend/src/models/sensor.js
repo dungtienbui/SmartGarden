@@ -17,10 +17,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Sensor.init({
     name: DataTypes.STRING,
-    sensorType: DataTypes.STRING,
     unit: DataTypes.STRING,
     description: DataTypes.BOOLEAN,
-    gardenId: DataTypes.INTEGER
+    GardenId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Sensor',

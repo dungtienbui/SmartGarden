@@ -9,7 +9,7 @@ module.exports = {
       },
       sensorId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
       },
       value: {
         type: Sequelize.INTEGER
