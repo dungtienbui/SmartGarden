@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LiveClock from '../../components/LiveClock';
 
-import { BsToggleOff } from "react-icons/bs";
-import { BsToggleOn } from "react-icons/bs";
+import { BsToggleOff } from 'react-icons/bs';
+import { BsToggleOn } from 'react-icons/bs';
 
-import bulb from './img/bulb.svg';
-import pump from './img/pump.png';
+import bulb from '../../assets/bulb.svg';
+import pump from '../../assets/pump.png';
 import './Control.scss';
 
-
-
-function Control() {    
+function Control() {
     const [envData, setEnvData] = useState([]);
     const params = useParams();
     useEffect(() => {
@@ -64,68 +62,90 @@ function Control() {
             <h3 className="title fw-normal text-center py-3">Cài đặt lịch trình</h3>
             <div className="env-control px-3">
                 {envData.map((data, index) => (
-                <div>                    
-                    <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4" key={index}>
-                        <div className='bulb p-2'>
-                            <div className="icon p-2 rounded-4">
-                                <div className='default-layout' style={{ backgroundImage: `url(${bulb})` }}></div>
-                                <h4 className="title">đèn</h4>
-                            </div>                            
-                            <div className='bulb-set'><h5 className="title mt-1 mb-1">Cài đặt đèn</h5></div>
+                    <div>
+                        <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4" key={index}>
+                            <div className="bulb p-2">
+                                <div className="icon p-2 rounded-4">
+                                    <div className="default-layout" style={{ backgroundImage: `url(${bulb})` }}></div>
+                                    <h4 className="title">đèn</h4>
+                                </div>
+                                <div className="bulb-set">
+                                    <h5 className="title mt-1 mb-1">Cài đặt đèn</h5>
+                                </div>
+                            </div>
+
+                            <div className="data ps-3">
+                                <div className="title line-bt1">
+                                    <div className="s">Trạng thái: {data.condition1 ? 'đang bật' : 'đang tắt'}</div>
+                                    <div key={index} className="o" onClick={() => handleClick1(index)}>
+                                        {data.condition1 ? (
+                                            <BsToggleOn className="toggle" color="green" />
+                                        ) : (
+                                            <BsToggleOff className="toggle" color="red" />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="title line-bt1">
+                                    <div className="s">Tự động bật đèn khi ánh sáng dưới: </div>
+                                    <div key={index} className="o" onClick={() => handleClick2(index)}>
+                                        {data.threshold1 ? (
+                                            <BsToggleOn className="toggle" color="green" />
+                                        ) : (
+                                            <BsToggleOff className="toggle" color="red" />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="title">
+                                    <div className="s">
+                                        Lịch trình: {data.value1}/{data.total1}
+                                    </div>
+                                    <div className="t m-md-3 d-flex align-items-center justify-content-center">
+                                        Thiết lập
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="data ps-3">
-                            <div className="title line-bt1">
-                                <div className='s'>Trạng thái: {data.condition1 ? "đang bật" : "đang tắt"}</div>
-                                <div key={index} className='o' onClick={() => handleClick1(index)}>
-                                    {data.condition1 ? <BsToggleOn className='toggle' color='green'/> : <BsToggleOff className='toggle' color='red'/>}
+                        <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4" key={index}>
+                            <div className="bulb p-2">
+                                <div className="icon p-2 rounded-4">
+                                    <div className="default-layout" style={{ backgroundImage: `url(${pump})` }}></div>
+                                    <h4 className="title">máy bơm</h4>
                                 </div>
                             </div>
-                            <div className="title line-bt1">
-                                <div className='s'>Tự động bật đèn khi ánh sáng dưới: </div>
-                                <div key={index} className='o' onClick={() => handleClick2(index)}>
-                                    {data.threshold1 ? <BsToggleOn className='toggle' color='green'/> : <BsToggleOff className='toggle' color='red'/>}
-                                </div>
-                                
-                            </div>
-                            <div className='title'>
-                                <div className="s">Lịch trình: {data.value1}/{data.total1}</div>
-                                <div className='t m-md-3 d-flex align-items-center justify-content-center'>Thiết lập</div>    
-                            </div>
-                            
-                        </div>                                        
-                    </div>
-                    
-                    <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4" key={index}>
-                        <div className='bulb p-2'>
-                            <div className="icon p-2 rounded-4">
-                                <div className='default-layout' style={{ backgroundImage: `url(${pump})` }}></div>
-                                <h4 className="title">máy bơm</h4>
-                            </div>       
-                        </div>
 
-                        <div className="data ps-3">
-                            <div className="title line-bt1">
-                                <div className='s'>Trạng thái: {data.condition2 ? "đang bật" : "đang tắt"}</div>
-                                <div key={index} className='o' onClick={() => handleClick3(index)}>
-                                    {data.condition2 ? <BsToggleOn className='toggle' color='green'/> : <BsToggleOff className='toggle' color='red'/>}
+                            <div className="data ps-3">
+                                <div className="title line-bt1">
+                                    <div className="s">Trạng thái: {data.condition2 ? 'đang bật' : 'đang tắt'}</div>
+                                    <div key={index} className="o" onClick={() => handleClick3(index)}>
+                                        {data.condition2 ? (
+                                            <BsToggleOn className="toggle" color="green" />
+                                        ) : (
+                                            <BsToggleOff className="toggle" color="red" />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="title line-bt1">
+                                    <div className="s">Tự động bật đèn khi ánh sáng dưới: </div>
+                                    <div key={index} className="o" onClick={() => handleClick4(index)}>
+                                        {data.threshold2 ? (
+                                            <BsToggleOn className="toggle" color="green" />
+                                        ) : (
+                                            <BsToggleOff className="toggle" color="red" />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="title">
+                                    <div className="s">
+                                        Lịch trình: {data.value1}/{data.total1}
+                                    </div>
+                                    <div className="t m-md-3 d-flex align-items-center justify-content-center">
+                                        Thiết lập
+                                    </div>
                                 </div>
                             </div>
-                            <div className="title line-bt1">
-                                <div className='s'>Tự động bật đèn khi ánh sáng dưới: </div>
-                                <div key={index} className='o' onClick={() => handleClick4(index)}>
-                                    {data.threshold2 ? <BsToggleOn className='toggle' color='green'/> : <BsToggleOff className='toggle' color='red'/>}
-                                </div>
-                                
-                            </div>
-                            <div className='title'>
-                                <div className="s">Lịch trình: {data.value1}/{data.total1}</div>
-                                <div className='t m-md-3 d-flex align-items-center justify-content-center'>Thiết lập</div>    
-                            </div>
-                            
-                        </div>                                        
+                        </div>
                     </div>
-                </div>  
                 ))}
             </div>
             <LiveClock className={'fs-4 text-secondary text-end mt-3 me-2'} />
