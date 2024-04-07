@@ -37,21 +37,31 @@ username: admin, password: 123456
 1. Backend: cd đến folder Backend.
 
 - Chạy lần đầu tiên:
+
   Tạo database mysql mới tên smartgarden
+  
   npm i
+  
   npx sequelize-cli db:migrate
+  
   npx sequelize-cli db:seed:all
+  
   npm start
+  
 - Những lần sau:
+
   npm start
 
 2. Frontend: cd đến folder Frontend.
 
 - Chạy lần đầu tiên:
+  
   npm i
+  
   npm run dev
 
 - Những lần sau:
+  
   npm run dev
 
 ## More:
