@@ -6,6 +6,8 @@ import Data from '../pages/Data/Data';
 import Control from '../pages/Control/Control';
 import Statistic from '../pages/Statistic/Statistic';
 import Setting from '../pages/Setting/Setting';
+import ThresholdSetting from '../pages/Setting/ThresholdSetting/ThresholdSetting';
+import SetGardenThreshold from '../pages/Setting/ThresholdSetting/SetGardenThreshold';
 import Login from '../pages/LoginRegister/Login';
 import Register from '../pages/LoginRegister/Register';
 import GardenNav from '../layout/GardenNav/GardenNav';
@@ -50,6 +52,16 @@ const privateRoutes = [
         component: () => <WrapPrivate children={<Setting />} />,
         layout: DefaultLayout,
         title: 'CÀI ĐẶT',
+    },
+    {
+        path: 'setting/threshold-setting',
+        component: () => <WrapPrivate children={<ThresholdSetting />} />,
+        layout: DefaultLayout,
+    },
+    {
+        path: 'setting/threshold-setting/:gardenId',
+        component: () => <WrapPrivate children={<SetGardenThreshold />} />,
+        layout: DefaultLayout,
     },
 ];
 
