@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      MeasuredValue.belongsTo(models.Sensor)
+      MeasuredValue.belongsTo(models.Sensor);
     }
   }
   MeasuredValue.init({
     timestamp: DataTypes.DATE,
-    sensorId: DataTypes.INTEGER,
+    sensorId: DataTypes.STRING,
     value: DataTypes.INTEGER,
     isOutThreshold: DataTypes.BOOLEAN
   }, {

@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     unit: DataTypes.STRING,
     value: DataTypes.STRING,
     isUpperBound: DataTypes.BOOLEAN,
-    gardenId: DataTypes.INTEGER
+    GardenId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Threshold',

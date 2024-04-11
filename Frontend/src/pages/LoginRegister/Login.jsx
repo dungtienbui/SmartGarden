@@ -33,6 +33,7 @@ function Login() {
                 sessionStorage.setItem('loginValue', JSON.stringify(loginValue));
                 navigate('/data/1');
             } else {
+                setIsValid({ username: false, password: false });
                 console.log(res.EM);
             }
         }
@@ -88,7 +89,7 @@ function Login() {
                                 value={username}
                                 onChange={(e) => {
                                     setUsername(e.target.value);
-                                    setIsValid({ ...isValid, username: true });
+                                    setIsValid(defaultIsValid);
                                 }}
                             />
                         </div>
@@ -100,7 +101,7 @@ function Login() {
                                 value={password}
                                 onChange={(e) => {
                                     setPassword(e.target.value);
-                                    setIsValid({ ...isValid, password: true });
+                                    setIsValid(defaultIsValid);
                                 }}
                                 onKeyDown={handleKeyDown}
                             />

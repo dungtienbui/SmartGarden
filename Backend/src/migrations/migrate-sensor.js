@@ -5,14 +5,10 @@ module.exports = {
     await queryInterface.createTable('Sensor', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      name: {
         type: Sequelize.STRING
       },
-      sensorType: {
+      name: {
         type: Sequelize.STRING
       },
       unit: {
@@ -21,7 +17,7 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      gardenId: {
+      GardenId: {
         allowNull: false,
         type: Sequelize.INTEGER
       }

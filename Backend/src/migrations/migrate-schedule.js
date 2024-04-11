@@ -18,7 +18,7 @@ module.exports = {
       isUsed: {
         type: Sequelize.BOOLEAN
       },
-      deviceId: {
+      DeviceId: {
         allowNull: false,
         type: Sequelize.INTEGER
       }

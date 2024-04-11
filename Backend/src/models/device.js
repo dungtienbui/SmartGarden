@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     currentState: DataTypes.BOOLEAN,
     isAppliedThreshold: DataTypes.BOOLEAN,
     isAppliedSchedule: DataTypes.BOOLEAN,
-    gardenId: DataTypes.INTEGER
+    GardenId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Device',
