@@ -75,4 +75,44 @@ const getSensorInfo = async (sensorId) => {
 }
 
 
-module.exports = { getAllGarden, getLastSavedValue, getAllSensor, getSensorInfo };
+// Threshold value
+const getThresholdValueByGardenId = async (GardenId) => {
+    try {
+        const thresholdValue = await db.Threshold.findAll({where: {GardenId}, raw: true});
+        if (thresholdValue) {
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: thresholdValue
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr
+    }
+}
+
+
+const updateLightIntensiveThresholdOfGarden = async (GardenId) => {
+    // try {
+    //     await db.MeasuredValue.create({ timestamp, sensorId, value, isOutThreshold }, { fields: ['timestamp', 'sensorId', 'value', 'isOutThreshold'] });
+    // } catch (err) {
+    //     console.log(err);
+    // }
+
+    try {
+        await db.Threshold.update(
+            {},
+            {
+                where: {
+                    
+                }
+            }
+        )
+    } catch (error) {
+        
+    }
+}
+
+
+module.exports = { getAllGarden, getLastSavedValue, getAllSensor, getSensorInfo, getThresholdValueByGardenId, updateLightIntensiveThresholdOfGarden };
