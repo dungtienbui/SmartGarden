@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import routes from './routes';
 import connectDb from './config/connectDb';
+import { updateData } from './services/adafruitService';
 
 require('dotenv').config()
 
@@ -13,6 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 connectDb();
+
+updateData();
 
 routes(app);
 

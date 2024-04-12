@@ -4,7 +4,7 @@ import queryService from './queryService';
 require('dotenv').config()
 
 const key = process.env.X_AIO_KEY;
-const getNewestData = async () => {
+const saveNewestData = async () => {
     try {
         const sensorIds = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
         for (const sensorId of sensorIds) {
@@ -19,4 +19,8 @@ const getNewestData = async () => {
     }
 }
 
-module.exports = { getNewestData };
+const updateData = () => {
+    const timerId = setInterval(async () => {await saveNewestData()}, process.env.TIME_INTERVAL)
+}
+
+module.exports = { updateData };

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { privateRoutes } from '../routes/AppRoutes';
 import ModalLogout from '../components/ModalLogout';
+import Notification from '../components/Notification';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
@@ -15,6 +16,7 @@ function DefaultLayout({ children }) {
 
     return (
         <div className="default-layout" style={{ backgroundImage: `url(${background})` }}>
+            <Notification />
             <div className="header d-flex mb-3">
                 <div className="pages m-auto ps-5 d-flex">
                     {privateRoutes.map(

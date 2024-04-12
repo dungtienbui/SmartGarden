@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import WrapPrivate from './WrapPrivate';
 import DefaultLayout from '../layout/DefaultLayout';
 import Data from '../pages/Data/Data';
+import SensorData from '../pages/Data/SensorData/SensorData';
 import Control from '../pages/Control/Control';
 import Statistic from '../pages/Statistic/Statistic';
 import Setting from '../pages/Setting/Setting';
@@ -14,36 +15,26 @@ const privateRoutes = [
     { path: '/', component: () => <Navigate to="/login" />, layout: DefaultLayout },
     {
         path: '/data',
-        component: () => <Navigate to="/data/1" />,
+        component: () => <WrapPrivate children={<GardenNav children={<Data />} />} />,
         layout: DefaultLayout,
         title: 'GIÁM SÁT MÔI TRƯỜNG',
     },
     {
-        path: '/data/:gardenId',
-        component: () => <WrapPrivate children={<GardenNav children={<Data />} />} />,
+        path: '/data/:sensorId',
+        component: () => <WrapPrivate children={<SensorData />} />,
         layout: DefaultLayout,
     },
     {
         path: '/control',
-        component: () => <Navigate to="/control/1" />,
+        component: () => <WrapPrivate children={<GardenNav children={<Control />} />} />,
         layout: DefaultLayout,
         title: 'ĐIỀU KHIỂN THIẾT BỊ',
     },
     {
-        path: '/control/:gardenId',
-        component: () => <WrapPrivate children={<GardenNav children={<Control />} />} />,
-        layout: DefaultLayout,
-    },
-    {
         path: '/statistic',
-        component: () => <Navigate to="/statistic/1" />,
-        layout: DefaultLayout,
-        title: 'THỐNG KÊ',
-    },
-    {
-        path: '/statistic/:gardenId',
         component: () => <WrapPrivate children={<GardenNav children={<Statistic />} />} />,
         layout: DefaultLayout,
+        title: 'THỐNG KÊ',
     },
     {
         path: '/setting',

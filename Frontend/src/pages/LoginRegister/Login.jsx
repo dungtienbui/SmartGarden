@@ -31,7 +31,7 @@ function Login() {
             if (+res.EC === 0) {
                 const loginValue = { username: username.trim(), password: password };
                 sessionStorage.setItem('loginValue', JSON.stringify(loginValue));
-                navigate('/data/1');
+                navigate('/data');
             } else {
                 setIsValid({ username: false, password: false });
                 console.log(res.EM);
@@ -53,7 +53,7 @@ function Login() {
                 if (loginValue.username && loginValue.password) {
                     const res = await login(loginValue.username, loginValue.password);
                     if (res && +res.EC === 0) {
-                        navigate('/data/1');
+                        navigate('/data');
                         return;
                     }
                 }

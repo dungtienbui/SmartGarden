@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import LiveClock from '../../components/LiveClock';
 
 import { BsToggleOff } from 'react-icons/bs';
@@ -11,7 +11,8 @@ import './Control.scss';
 
 function Control() {
     const [envData, setEnvData] = useState([]);
-    const params = useParams();
+    const [searchParams] = useSearchParams();
+    const gardenId = searchParams.get('gardenId');
     useEffect(() => {
         const res1 = [
             {
@@ -26,12 +27,12 @@ function Control() {
                 total2: '3',
             },
         ];
-        if (params.gardenId == 'g1') {
+        if (gardenId == 'g1') {
             setEnvData(res1);
         } else {
             setEnvData(res1);
         }
-    }, [params.gardenId]);
+    }, [gardenId]);
 
     const handleClick1 = (index) => {
         const updatedEnvData = [...envData];
@@ -62,8 +63,8 @@ function Control() {
             <h3 className="title fw-normal text-center py-3">Cài đặt lịch trình</h3>
             <div className="env-control px-3">
                 {envData.map((data, index) => (
-                    <div>
-                        <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4" key={index}>
+                    <div key={index}>
+                        <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4">
                             <div className="bulb p-2">
                                 <div className="icon p-2 rounded-4">
                                     <div className="default-layout" style={{ backgroundImage: `url(${bulb})` }}></div>

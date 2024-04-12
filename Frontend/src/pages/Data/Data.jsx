@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { getNewestData } from '../../services/adafruitService';
 import { getAllSensor } from '../../services/webService';
 import LiveClock from '../../components/LiveClock';
@@ -9,9 +9,12 @@ import { faLightbulb, faDroplet, faLeaf, faTemperatureHigh } from '@fortawesome/
 import './Data.scss';
 
 function Data() {
-    const params = useParams();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const gardenId = searchParams.get('gardenId');
     const sampleData = [
         {
+            sensorId: 'anhsang',
             title: 'Cường độ ánh sáng',
             time: 'loading...',
             value: '',
@@ -19,6 +22,7 @@ function Data() {
             icon: <FontAwesomeIcon color="#FFF732" icon={faLightbulb} />,
         },
         {
+            sensorId: 'doamdat',
             title: 'Độ ẩm đất',
             time: 'loading...',
             value: '',
@@ -26,6 +30,7 @@ function Data() {
             icon: <FontAwesomeIcon color="#44C7FF" icon={faDroplet} />,
         },
         {
+            sensorId: 'doamkk',
             title: 'Độ ẩm không khí',
             time: 'loading...',
             value: '',
@@ -33,6 +38,7 @@ function Data() {
             icon: <FontAwesomeIcon color="#009957" icon={faLeaf} />,
         },
         {
+            sensorId: 'nhietdo',
             title: 'Nhiệt độ',
             time: 'loading...',
             value: '',
@@ -44,15 +50,14 @@ function Data() {
     useEffect(() => {
         let stopGetting = false;
         const getUnit = async () => {
-            const sensorIds = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
             const raw = await getAllSensor(1);
             let data = [...sampleData];
-            for (let i = 0; i < sensorIds.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 data[i].unit = raw.DT[i].unit;
             }
         };
         const getData = async () => {
-            const raw = await getNewestData(params.gardenId);
+            const raw = await getNewestData(gardenId);
             let data = [...sampleData];
             for (let i = 0; i < raw.length; i++) {
                 data[i] = { ...data[i], time: raw[i].time, value: raw[i].value };
@@ -69,7 +74,7 @@ function Data() {
             setEnvData(sampleData);
             stopGetting = true;
         };
-    }, [params.gardenId]);
+    }, [gardenId]);
 
     return (
         <div className="data-page h-100 px-3 position-relative">
@@ -88,7 +93,10 @@ function Data() {
                             </div>
                         </div>
                         <div className="align-self-center me-5">
-                            <button type="button" className="btn btn-outline-secondary fs-5">
+                            <button
+                                className="btn btn-outline-secondary fs-5"
+                                onClick={() => navigate(`/data/${data.sensorId}?gardenId=${gardenId}`)}
+                            >
                                 Chi tiết
                             </button>
                         </div>
