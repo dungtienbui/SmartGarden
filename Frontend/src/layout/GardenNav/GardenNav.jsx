@@ -13,6 +13,7 @@ function GardenNav({ children }) {
         const path = location.pathname.substring(0, location.pathname.lastIndexOf('/'));
         const getGardens = async () => {
             let res = await getAllGarden();
+            console.log(res)
             let gardens;
             if (res && res.EC === 0) {
                 gardens = res.DT.map((garden) => {
