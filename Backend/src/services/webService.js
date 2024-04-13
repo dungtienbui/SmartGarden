@@ -4,7 +4,7 @@ import adafruitService from './adafruitService';
 import queryService from './queryService';
 
 
-const serviceErr = { 
+const serviceErr = {
     EM: 'Error from service',
     EC: -2,
     DT: ''
@@ -44,7 +44,7 @@ const getLastSavedValue = async (sensorId) => {
 
 const getAllSensor = async (GardenId) => {
     try {
-        const allSensor = await db.Sensor.findAll({where: {GardenId}, raw: true});
+        const allSensor = await db.Sensor.findAll({ where: { GardenId }, raw: true });
         if (allSensor) {
             return {
                 EM: 'Get succeed',
@@ -60,7 +60,7 @@ const getAllSensor = async (GardenId) => {
 
 const getSensorInfo = async (sensorId) => {
     try {
-        const sensor = await db.Sensor.findOne({where: { id: sensorId }, raw: true});
+        const sensor = await db.Sensor.findOne({ where: { id: sensorId }, raw: true });
         if (sensor) {
             return {
                 EM: 'Get succeed',
@@ -75,44 +75,5 @@ const getSensorInfo = async (sensorId) => {
 }
 
 
-// Threshold value
-const getThresholdValueByGardenId = async (GardenId) => {
-    try {
-        const thresholdValue = await db.Threshold.findAll({where: {GardenId}, raw: true});
-        if (thresholdValue) {
-            return {
-                EM: 'Get succeed',
-                EC: 0,
-                DT: thresholdValue
-            }
-        }
-    } catch (err) {
-        console.log(err);
-        return serviceErr
-    }
-}
 
-
-const updateLightIntensiveThresholdOfGarden = async (GardenId) => {
-    // try {
-    //     await db.MeasuredValue.create({ timestamp, sensorId, value, isOutThreshold }, { fields: ['timestamp', 'sensorId', 'value', 'isOutThreshold'] });
-    // } catch (err) {
-    //     console.log(err);
-    // }
-
-    try {
-        await db.Threshold.update(
-            {},
-            {
-                where: {
-                    
-                }
-            }
-        )
-    } catch (error) {
-        
-    }
-}
-
-
-module.exports = { getAllGarden, getLastSavedValue, getAllSensor, getSensorInfo, getThresholdValueByGardenId, updateLightIntensiveThresholdOfGarden };
+module.exports = { getAllGarden, getLastSavedValue, getAllSensor, getSensorInfo };

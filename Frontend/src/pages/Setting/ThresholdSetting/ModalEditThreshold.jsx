@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { updateLightIntensiveThresholdOfGarden } from '../../../services/thesholdService';
+
 
 function ModalEditThreshold(prop) {
     const [show, setShow] = useState(false);
@@ -14,6 +16,15 @@ function ModalEditThreshold(prop) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const existTitle = {
+        'anhsang' : 'Ánh sáng',
+        'doamkk' : 'Độ ẩm không khí',
+        'doamdat' : 'Độ ẩm đất',
+        'nhietdo' : 'Nhiệt độ',
+    }
+
+    const isSensorTypeValid = existTitle[prop.objectSetting.sensorType] !== undefined ? true : false
 
     const checkConstraints = () => {
         // // Xử lý khi người dùng lưu dữ liệu
@@ -49,11 +60,32 @@ function ModalEditThreshold(prop) {
 
     useEffect(checkConstraints, [upperBound, lowerBound]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         // console.log(isMax && isMin && minMaxConstraint && false)
         // console.log(isMax && isMin && minMaxConstraint)
         if (isMax && isMin && minMaxConstraint && !isEmptyInput) {
-            
+            let newUpper = upperBound != prop.objectSetting.currUpper ? upperBound : null
+            let newLower = lowerBound != prop.objectSetting.currLower ? lowerBound : null
+
+            if (newUpper != null || newLower != null){
+                try {
+                    const response = await updateLightIntensiveThresholdOfGarden(
+                        prop.objectSetting.gardenId,
+                        prop.objectSetting.sensorType,
+                        newUpper,
+                        newLower,
+                    );
+    
+                    if (response === null) {
+                        console.error('GardenId không hợp lệ.');
+                    } else {
+                        console.log('Cập nhật ngưỡng ánh sáng thành công!');
+                    }
+                } catch (err) {
+                    console.error('Đã xảy ra lỗi khi cập nhật ngưỡng ánh sáng:', err);
+                }
+            }
+
             
 
             handleClose();
@@ -68,7 +100,7 @@ function ModalEditThreshold(prop) {
 
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Chỉnh sửa ngưỡng: {prop.objectSetting.name}</Modal.Title>
+                    <Modal.Title>Chỉnh sửa ngưỡng: {isSensorTypeValid ? existTitle[prop.objectSetting.id] : 'SensorType error!!!'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {/* Ô nhập số liệu */}
@@ -76,8 +108,8 @@ function ModalEditThreshold(prop) {
                         <div className="text-danger fs-5">
                             {isEmptyInput && <div>Không được bỏ trống trường thông tin!</div>}
                             {!minMaxConstraint && <div>Giá trị cận trên phải lớn hơn giá trị cận dưới!</div>}
-                            {!isMax && <div>Giá trị cận trên vượt quá mức quy định {prop.objectSetting.ma}</div>}
-                            {!isMin && <div>Giá trị cận dưới thấp hơn mức quy định {prop.objectSetting.min}</div>}
+                            {!isMax && <div>Giá trị cận trên vượt quá mức quy định ({prop.objectSetting.max})</div>}
+                            {!isMin && <div>Giá trị cận dưới thấp hơn mức quy định ({prop.objectSetting.min})</div>}
                         </div>
                         <div className="form-edit d-flex flex-row justify-content-center align-items-center">
                             <div className="label-part d-flex flex-column justify-content-center align-items-center">
@@ -151,7 +183,8 @@ function ModalEditThreshold(prop) {
                     <Button variant="secondary" onClick={handleClose}>
                         Huỷ
                     </Button>
-                    <Button variant="primary" onClick={handleSave}>
+
+                    <Button variant="primary" onClick={handleSave} disabled={!isSensorTypeValid}>
                         Lưu
                     </Button>
                 </Modal.Footer>
