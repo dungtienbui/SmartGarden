@@ -8,10 +8,6 @@ const getAllSensor = async (gardenId) => {
     return await webAxios.get('/sensor/info', { params: { gardenId } });
 };
 
-// get threshold values of garden with 'gardenId'
-// [get] :/threshold/value/:gardenId
-const getThresholdByGardenId = async (gardenId) => {
-    return await webAxios.get('/threshold/value', { params: { gardenId } });
-}
 
-export { getAllGarden, getAllSensor, getThresholdByGardenId };
+
+export { getAllGarden, getAllSensor };

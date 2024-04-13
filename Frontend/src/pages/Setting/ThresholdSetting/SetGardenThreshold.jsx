@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { getThresholdByGardenId } from '../../../services/webService';
+import { getThresholdByGardenId, updateLightIntensiveThresholdOfGarden } from '../../../services/thesholdService';
 import LiveClock from '../../../components/LiveClock';
 import ModalEditThreshold from './ModalEditThreshold';
 
@@ -129,7 +129,7 @@ function SetGardenThreshold() {
                         </div>
                         <div className="align-self-center ms-3 me-3">
                             <ModalEditThreshold
-                                objectSetting={{ name: data.title, currUpper: data.upperValue, currLower: data.lowerValue, max: data.max, min: data.min}}
+                                objectSetting={{ gardenId: params.gardenId, sensorType: data.id, currUpper: data.upperValue, currLower: data.lowerValue, max: data.max, min: data.min}}
                             />
                         </div>
                     </div>

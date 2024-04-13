@@ -12,9 +12,11 @@ const router = express.Router();
 
 import thresholdController from '../controllers/thresholdController';
 
+//[Get] /value/:gardenId
+router.get('/value/:gardenId', thresholdController.getThresholdValueByGardenId);
 
-router.get('/value', thresholdController.getThresholdValueByGardenId);
-// router.post('/update/light-intensive', thresholdController.updateLightIntensiveThresholdOfGarden)
+//[post] /update/light-intensive/:gardenId . post a object {upperValue, lowerValue}
+router.post('/update/:sensorType/:gardenId', thresholdController.updateThresholdOfGarden)
 
 export default router;
 
