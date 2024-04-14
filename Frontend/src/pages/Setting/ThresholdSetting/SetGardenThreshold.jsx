@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { getAllSensor } from '../../../services/webService';
+import { getThresholdByGardenId } from '../../../services/thesholdService';
 import LiveClock from '../../../components/LiveClock';
 import ModalEditThreshold from './ModalEditThreshold';
 
@@ -12,66 +12,92 @@ import './SetGardenThreshold.scss';
 
 function SetGardenThreshold() {
     const params = useParams();
+    // console.log(params.gardenId)
+
+    // [1 : anhsang] [2: doamdat] [3: doamkk] [4: nhietdo]
     const sampleData = [
         {
+            id: 'anhsang',
             title: 'Cường độ ánh sáng',
-            time: 'loading...',
-            value: '400',
-            unit: '',
+            upperValue: '0',
+            lowerValue: '0',
+            unit: 'Lux',
+            max: 9999,
+            min: 0,
             icon: <FontAwesomeIcon color="#FFF732" icon={faLightbulb} />,
         },
         {
+            id: 'doamdat',
             title: 'Độ ẩm đất',
-            time: 'loading...',
-            value: '',
-            unit: '',
+            upperValue: '0',
+            lowerValue: '0',
+            unit: '%',
+            max: 100,
+            min: 0,
             icon: <FontAwesomeIcon color="#44C7FF" icon={faDroplet} />,
         },
         {
+            id: 'doamkk',
             title: 'Độ ẩm không khí',
-            time: 'loading...',
-            value: '',
-            unit: '',
+            upperValue: '0',
+            lowerValue: '0',
+            unit: '%',
+            max: 100,
+            min: 0,
             icon: <FontAwesomeIcon color="#009957" icon={faLeaf} />,
         },
         {
+            id: 'nhietdo',
             title: 'Nhiệt độ',
-            time: 'loading...',
-            value: '',
-            unit: '',
+            upperValue: '0',
+            lowerValue: '0',
+            unit: '°C',
+            max: 100,
+            min: -273,
             icon: <FontAwesomeIcon color="#F32E28" icon={faTemperatureHigh} />,
         },
     ];
-    const [envData, setEnvData] = useState(sampleData);
+
+    const [thresholdData, setThresholdData] = useState([]);
+
+    const [toggleEditValue, setToggleEditValue] = useState(false);
+
+
     useEffect(() => {
-        let stopGetting = false;
-        const getUnit = async () => {
-            const sensorIds = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
-            const raw = await getAllSensor(1);
-            let data = [...sampleData];
-            for (let i = 0; i < sensorIds.length; i++) {
-                data[i].unit = raw.DT[i].unit;
+        const fetchData = async () => {
+            const typeSensor = {
+                anhsang: 0,
+                doamdat: 1,
+                doamkk: 2,
+                nhietdo: 3,
+            };
+
+            const typeValue = ['lowerValue', 'upperValue'];
+
+            try {
+                const response = await getThresholdByGardenId(params.gardenId);
+
+                let raws = response.DT;
+
+                let data = [...sampleData];
+
+                // console.log(data[0])
+
+                for (const raw of raws) {
+                    data[typeSensor[raw.sensorType]][typeValue[raw.isUpperBound]] = raw.value
+                    data[typeSensor[raw.sensorType]]['unit'] = raw.unit
+                }
+
+                // console.log(raws)
+                // console.log(data)
+
+                setThresholdData(data)
+            } catch (error) {
+                console.error('Error fetching garden:', error);
             }
         };
-        const getData = async () => {
-            const raw = await getNewestData(params.gardenId);
-            let data = [...sampleData];
-            for (let i = 0; i < raw.length; i++) {
-                data[i] = { ...data[i], time: raw[i].time, value: raw[i].value };
-            }
-            if (!stopGetting) {
-                setEnvData(data);
-            }
-        };
-        getUnit();
-        getData();
-        const intervalId = setInterval(() => getData(), 2000);
-        return () => {
-            clearInterval(intervalId);
-            setEnvData(sampleData);
-            stopGetting = true;
-        };
-    }, [params.gardenId]);
+        fetchData();
+    }, [toggleEditValue]);
 
     const navigate = useNavigate();
 
@@ -86,9 +112,10 @@ function SetGardenThreshold() {
                     Go Back
                 </button>
                 <h3 className="w-100 text-center">Ngưỡng giá trị môi trường</h3>
+                <h4 className="text-center position-absolute end-0 top-50">Garden: {params.gardenId}</h4>
             </div>
             <div className="env-data px-3 mt-2 d-flex flex-column justify-content-around">
-                {envData.map((data, index) => (
+                {thresholdData.map((data, index) => (
                     <div className="data-card d-flex p-2 my-2 justify-content-between rounded-4" key={index}>
                         <div className="data-info d-flex gap-4 flex-fill">
                             <div className="icon p-2 me-2 rounded-4">{data.icon}</div>
@@ -96,21 +123,25 @@ function SetGardenThreshold() {
                                 <h4 className="title mt-2 mb-3">{data.title}</h4>
                                 {/* <p className="time d-inline fs-5">{data.time}</p> */}
                                 <p className="value d-inline ms-3 fs-4 text-danger">
-                                    Cận trên: {data.value} {data.unit}
+                                    Cận trên: {data.upperValue} {data.unit}
                                 </p>
                                 <p className="value d-inline ms-3 fs-4 text-danger">
-                                    Cận dưới: {data.value} {data.unit}
+                                    Cận dưới: {data.lowerValue} {data.unit}
                                 </p>
                             </div>
                         </div>
                         <div className="align-self-center ms-3 me-3">
-                            <ModalEditThreshold objectSetting={{ name: data.title }} />
+                            <ModalEditThreshold
+                                objectSetting={{ gardenId: params.gardenId, sensorType: data.id, currUpper: data.upperValue, currLower: data.lowerValue, max: data.max, min: data.min}}
+                                setToggleEditValue={setToggleEditValue}
+                                toggleEditValue = {toggleEditValue}
+                            />
                         </div>
                     </div>
                 ))}
             </div>
             <div className="position-absolute bottom-0 end-0 m-4">
-                <LiveClock className={'fs-4 text-secondary text-end mt-3 me-2'}/>
+                <LiveClock className={'fs-4 text-secondary text-end mt-3 me-2'} />
             </div>
         </div>
     );

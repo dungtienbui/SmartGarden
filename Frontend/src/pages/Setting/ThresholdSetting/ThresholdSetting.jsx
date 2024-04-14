@@ -32,7 +32,7 @@ function ThresholdSetting() {
         navigate('/setting/threshold-setting/' + id.toString()); // "go-back"
     };
 
-    console.log(gardenData);
+    // console.log(gardenData);
     return (
         <div className="setting-page h-100 px-5 bg-white rounded-4 position-relative">
             <div className="title p-3 w-100 position-relative">
