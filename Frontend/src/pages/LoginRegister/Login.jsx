@@ -34,7 +34,7 @@ function Login() {
                 navigate('/data');
             } else {
                 setIsValid({ username: false, password: false });
-                console.log(res.EM);
+                alert('Sai tài khoản hoặc mật khẩu');
             }
         }
     };

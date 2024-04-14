@@ -13,7 +13,6 @@ function GardenNav({ children }) {
         const path = location.pathname.substring(0, location.pathname.lastIndexOf('/'));
         const getGardens = async () => {
             let res = await getAllGarden();
-            console.log(res)
             let gardens;
             if (res && res.EC === 0) {
                 gardens = res.DT.map((garden) => {
@@ -27,7 +26,9 @@ function GardenNav({ children }) {
                 ];
             }
             setGardenRoutes(gardens);
-            setSearchParams({ gardenId: gardens[0].path[gardens[0].path.length - 1] });
+            if (!gardenId) {
+                setSearchParams({ gardenId: gardens[0].path[gardens[0].path.length - 1] });
+            }
         };
         getGardens();
     }, []);

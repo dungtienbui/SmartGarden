@@ -1,9 +1,9 @@
 import db from '../models';
 
-const getSensorById = async (sensorId) => {
+const getSensorById = async (SensorId) => {
     try {
         const sensor = await db.Sensor.findOne({
-            where: { sensorId },
+            where: { SensorId },
             raw: true,
         });
         return sensor;
@@ -12,14 +12,14 @@ const getSensorById = async (sensorId) => {
     }
 };
 
-const getLastSavedValue = async (sensorId) => {
+const getLastSavedValue = async (SensorId) => {
     try {
         const lastValue = await db.MeasuredValue.findOne({
             attributes: { exclude: ['id'] },
             order: [['timestamp', 'DESC']],
             include: {
                 model: db.Sensor,
-                where: { id: sensorId },
+                where: { id: SensorId },
             },
             raw: true,
             nest: true
@@ -27,12 +27,13 @@ const getLastSavedValue = async (sensorId) => {
         return lastValue;
     } catch (err) {
         console.log(err);
+        return null
     }
 };
 
-const saveNewestValue = async (timestamp, sensorId, value, isOutThreshold) => {
+const saveNewestValue = async (timestamp, SensorId, value, isOutThreshold) => {
     try {
-        await db.MeasuredValue.create({ timestamp, sensorId, value, isOutThreshold }, { fields: ['timestamp', 'sensorId', 'value', 'isOutThreshold'] });
+        await db.MeasuredValue.create({ timestamp, SensorId, value, isOutThreshold }, { fields: ['timestamp', 'SensorId', 'value', 'isOutThreshold'] });
     } catch (err) {
         console.log(err);
     }

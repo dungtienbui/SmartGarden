@@ -17,7 +17,6 @@ function Notification() {
 
         return () => {
             eventSource.close();
-            console.log('Close event source');
         };
     }, []);
     return <div></div>;

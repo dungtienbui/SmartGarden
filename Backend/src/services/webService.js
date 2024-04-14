@@ -8,7 +8,7 @@ const serviceErr = {
     EM: 'Error from service',
     EC: -2,
     DT: ''
-}
+};
 
 const getAllGarden = async () => {
     try {
@@ -40,7 +40,7 @@ const getLastSavedValue = async (sensorId) => {
         console.log(err);
         return serviceErr
     }
-}
+};
 
 const getAllSensor = async (GardenId) => {
     try {
@@ -56,7 +56,7 @@ const getAllSensor = async (GardenId) => {
         console.log(err);
         return serviceErr
     }
-}
+};
 
 const getSensorInfo = async (sensorId) => {
     try {
@@ -72,7 +72,59 @@ const getSensorInfo = async (sensorId) => {
         console.log(err);
         return serviceErr
     }
-}
+};
 
+const getDataChart = async (SensorId, limit) => {
+    try {
+        const data = await db.MeasuredValue.findAll({
+            where: { SensorId },
+            attributes: { exclude: ['id'] },
+            order: [['timestamp', 'DESC']],
+            limit: limit, raw: true
+        });
+        if (data) {
+            let dataChart = {time: [], value: []};
+            for (let i = 0; i < limit; i++) {
+                let time = null;
+                let value = null;
+                if (i < data.length){
+                    time = data[data.length - i - 1].timestamp;
+                    value = data[data.length - i - 1].value;
+                }
+                dataChart.time.push(time);
+                dataChart.value.push(value);
+            }
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: dataChart
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr
+    }
+};
 
-module.exports = { getAllGarden, getLastSavedValue, getAllSensor, getSensorInfo };
+const getLastValue = async (SensorId) => {
+    try {
+        const lastValue = await db.MeasuredValue.findOne({
+            attributes: { exclude: ['id'] },
+            where: { SensorId },
+            order: [['timestamp', 'DESC']],
+            raw: true,
+        });
+        if (lastValue) {
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: lastValue
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr
+    }
+};
+
+module.exports = { getAllGarden, getLastSavedValue, getAllSensor, getSensorInfo, getDataChart, getLastValue };

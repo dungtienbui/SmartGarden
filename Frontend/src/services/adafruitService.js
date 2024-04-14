@@ -1,12 +1,10 @@
 import { adaAxios } from '../utils/axios';
-import { getAllGarden } from './webService';
 
 const key = import.meta.env.VITE_XAIO_KEY;
 
 const getNewestData = async (gardenId) => {
     let retData = [];
-    const allGarden = await getAllGarden();
-    if (allGarden && allGarden.EC === 0 && gardenId == allGarden?.DT[0].id) {
+    if (gardenId == 1) {
         const sensorIds = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
         for (let i = 0; i < sensorIds.length; i++) {
             const newestValue = await adaAxios.get(`/${sensorIds[i]}/data/last`, { params: { 'x-aio-key': key } });

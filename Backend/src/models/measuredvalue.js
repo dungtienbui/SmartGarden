@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   MeasuredValue.init({
     timestamp: DataTypes.DATE,
-    sensorId: DataTypes.STRING,
+    SensorId: DataTypes.STRING,
     value: DataTypes.INTEGER,
     isOutThreshold: DataTypes.BOOLEAN
   }, {

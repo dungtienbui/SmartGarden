@@ -1,9 +1,9 @@
 .title {
     font-weight: 500;
-    border-bottom: 2px solid #999;
+    // border-bottom: 2px solid #999;
 }
 
-.garden-selection{
+.garden-selection {
     width: 15rem;
     .garden-icon {
         background-color: #a2ef99;
@@ -11,17 +11,16 @@
         font-size: 5rem;
         text-align: center;
     }
-
 }
 
-.garden-selection:hover{
+.garden-selection:hover {
     // width: 16em;
-    .garden-icon{
+    .garden-icon {
         background-color: rgb(32, 170, 69);
         opacity: 100%;
     }
 
-    .garden-name{
+    .garden-name {
         font-size: larger;
     }
 

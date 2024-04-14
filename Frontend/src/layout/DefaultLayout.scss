@@ -1,9 +1,10 @@
 .default-layout {
+    --input-bg: #e8f0fe;
     height: 100vh;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    .header {
+    > .header {
         --header-height: 55px;
         height: var(--header-height);
         background-color: #ffffff55;

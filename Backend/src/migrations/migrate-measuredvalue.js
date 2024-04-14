@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      sensorId: {
+      SensorId: {
         allowNull: false,
         type: Sequelize.STRING,
       },

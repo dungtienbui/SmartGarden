@@ -8,4 +8,8 @@ const getAllSensor = async (gardenId) => {
     return await webAxios.get('/sensor/info', { params: { gardenId } });
 };
 
-export { getAllGarden, getAllSensor };
+const getSensorInfo = async (sensorId) => {
+    return await webAxios.get(`/sensor/info/${sensorId}`);
+};
+
+export { getAllGarden, getAllSensor, getSensorInfo };

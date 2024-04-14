@@ -25,10 +25,7 @@ class settingController {
                 res.write(`data: ${JSON.stringify(data)}\n\n`);
             }, 5000);
 
-            req.on('close', () => {
-                clearInterval(timerId);
-                console.log('Client disconnected');
-            });
+            req.on('close', () => clearInterval(timerId));
         } catch (err) {
             return res.status(500).json(serverErr);
         }

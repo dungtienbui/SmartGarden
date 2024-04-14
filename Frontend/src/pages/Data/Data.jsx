@@ -35,7 +35,7 @@ function Data() {
             time: 'loading...',
             value: '',
             unit: '',
-            icon: <FontAwesomeIcon color="#009957" icon={faLeaf} />,
+            icon: <FontAwesomeIcon color="#1D9E67" icon={faLeaf} />,
         },
         {
             sensorId: 'nhietdo',
@@ -43,7 +43,7 @@ function Data() {
             time: 'loading...',
             value: '',
             unit: '',
-            icon: <FontAwesomeIcon color="#F32E28" icon={faTemperatureHigh} />,
+            icon: <FontAwesomeIcon color="#F25550" icon={faTemperatureHigh} />,
         },
     ];
     const [envData, setEnvData] = useState(sampleData);
