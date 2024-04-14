@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { getThresholdByGardenId, updateLightIntensiveThresholdOfGarden } from '../../../services/thesholdService';
+import { getThresholdByGardenId } from '../../../services/thesholdService';
 import LiveClock from '../../../components/LiveClock';
 import ModalEditThreshold from './ModalEditThreshold';
 
@@ -60,6 +60,9 @@ function SetGardenThreshold() {
 
     const [thresholdData, setThresholdData] = useState([]);
 
+    const [toggleEditValue, setToggleEditValue] = useState(false);
+
+
     useEffect(() => {
         const fetchData = async () => {
             const typeSensor = {
@@ -94,7 +97,7 @@ function SetGardenThreshold() {
             }
         };
         fetchData();
-    }, []);
+    }, [toggleEditValue]);
 
     const navigate = useNavigate();
 
@@ -130,6 +133,8 @@ function SetGardenThreshold() {
                         <div className="align-self-center ms-3 me-3">
                             <ModalEditThreshold
                                 objectSetting={{ gardenId: params.gardenId, sensorType: data.id, currUpper: data.upperValue, currLower: data.lowerValue, max: data.max, min: data.min}}
+                                setToggleEditValue={setToggleEditValue}
+                                toggleEditValue = {toggleEditValue}
                             />
                         </div>
                     </div>

@@ -20,7 +20,7 @@ const getThresholdByGardenId = async (gardenId) => {
 //[post] /update/:sensorType/:gardenId . post a object {newUpper, newLower}
 // input: gardenId, newUpper, newLower
 // return: null if gardenId invalid
-const updateLightIntensiveThresholdOfGarden = async (gardenId, sensorType, newUpper, newLower) => {
+const updateThresholdOfGarden = async (gardenId, sensorType, newUpper, newLower) => {
 
     const isInteger = Number.isInteger(parseInt(gardenId));
 
@@ -33,4 +33,4 @@ const updateLightIntensiveThresholdOfGarden = async (gardenId, sensorType, newUp
 }
 
 
-export { getThresholdByGardenId, updateLightIntensiveThresholdOfGarden };
+export { getThresholdByGardenId, updateThresholdOfGarden };
