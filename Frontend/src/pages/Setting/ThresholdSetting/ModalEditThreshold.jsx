@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { updateLightIntensiveThresholdOfGarden } from '../../../services/thesholdService';
-
+import { updateThresholdOfGarden } from '../../../services/thesholdService';
 
 function ModalEditThreshold(prop) {
     const [show, setShow] = useState(false);
@@ -18,13 +17,13 @@ function ModalEditThreshold(prop) {
     const handleShow = () => setShow(true);
 
     const existTitle = {
-        'anhsang' : 'Ánh sáng',
-        'doamkk' : 'Độ ẩm không khí',
-        'doamdat' : 'Độ ẩm đất',
-        'nhietdo' : 'Nhiệt độ',
-    }
+        anhsang: 'Ánh sáng',
+        doamkk: 'Độ ẩm không khí',
+        doamdat: 'Độ ẩm đất',
+        nhietdo: 'Nhiệt độ',
+    };
 
-    const isSensorTypeValid = existTitle[prop.objectSetting.sensorType] !== undefined ? true : false
+    const isSensorTypeValid = existTitle[prop.objectSetting.sensorType] !== undefined ? true : false;
 
     const checkConstraints = () => {
         // // Xử lý khi người dùng lưu dữ liệu
@@ -64,18 +63,18 @@ function ModalEditThreshold(prop) {
         // console.log(isMax && isMin && minMaxConstraint && false)
         // console.log(isMax && isMin && minMaxConstraint)
         if (isMax && isMin && minMaxConstraint && !isEmptyInput) {
-            let newUpper = upperBound != prop.objectSetting.currUpper ? upperBound : null
-            let newLower = lowerBound != prop.objectSetting.currLower ? lowerBound : null
+            let newUpper = upperBound != prop.objectSetting.currUpper ? upperBound : null;
+            let newLower = lowerBound != prop.objectSetting.currLower ? lowerBound : null;
 
-            if (newUpper != null || newLower != null){
+            if (newUpper != null || newLower != null) {
                 try {
-                    const response = await updateLightIntensiveThresholdOfGarden(
+                    const response = await updateThresholdOfGarden(
                         prop.objectSetting.gardenId,
                         prop.objectSetting.sensorType,
                         newUpper,
                         newLower,
                     );
-    
+
                     if (response === null) {
                         console.error('GardenId không hợp lệ.');
                     } else {
@@ -84,9 +83,16 @@ function ModalEditThreshold(prop) {
                 } catch (err) {
                     console.error('Đã xảy ra lỗi khi cập nhật ngưỡng ánh sáng:', err);
                 }
-            }
 
-            
+                console.log(prop.toggleEditValue);
+
+                if (prop.toggleEditValue == false) {
+                    prop.setToggleEditValue(true);
+                } else {
+                    prop.setToggleEditValue(false);
+                }
+                console.log(prop.toggleEditValue);
+            }
 
             handleClose();
         }
@@ -100,7 +106,10 @@ function ModalEditThreshold(prop) {
 
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Chỉnh sửa ngưỡng: {isSensorTypeValid ? existTitle[prop.objectSetting.id] : 'SensorType error!!!'}</Modal.Title>
+                    <Modal.Title>
+                        Chỉnh sửa ngưỡng:{' '}
+                        {isSensorTypeValid ? existTitle[prop.objectSetting.id] : 'SensorType error!!!'}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {/* Ô nhập số liệu */}
