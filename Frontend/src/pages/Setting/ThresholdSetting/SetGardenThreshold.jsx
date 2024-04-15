@@ -83,8 +83,8 @@ function SetGardenThreshold() {
                 // console.log(data[0])
 
                 for (const raw of raws) {
-                    data[typeSensor[raw.sensorType]][typeValue[raw.isUpperBound]] = raw.value;
-                    data[typeSensor[raw.sensorType]]['unit'] = raw.unit;
+                    data[typeSensor[raw.SensorId]][typeValue[raw.isUpperBound]] = raw.value;
+                    data[typeSensor[raw.SensorId]]['unit'] = raw.unit;
                 }
 
                 // console.log(raws)
@@ -105,7 +105,7 @@ function SetGardenThreshold() {
     };
 
     return (
-        <div className="setting-page position-relative h-100 px-5 bg-white rounded-4">
+        <div className="set-garden-threshold-page position-relative h-100 px-5 bg-white rounded-4">
             <div className="title p-3 w-100 position-relative">
                 <button className="btn btn-primary position-absolute" onClick={gobackSetting}>
                     Go Back
@@ -121,7 +121,7 @@ function SetGardenThreshold() {
                             <div className="data flex-fill">
                                 <h4 className="title mt-2 mb-3">{data.title}</h4>
                                 {/* <p className="time d-inline fs-5">{data.time}</p> */}
-                                <p className="value d-inline ms-3 fs-4 text-danger">
+                                <p className="value d-inline fs-4 text-danger">
                                     Cận trên: {data.upperValue} {data.unit}
                                 </p>
                                 <p className="value d-inline ms-3 fs-4 text-danger">
@@ -133,7 +133,7 @@ function SetGardenThreshold() {
                             <ModalEditThreshold
                                 objectSetting={{
                                     gardenId: params.gardenId,
-                                    sensorType: data.id,
+                                    sensorId: data.id,
                                     currUpper: data.upperValue,
                                     currLower: data.lowerValue,
                                     max: data.max,

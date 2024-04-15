@@ -25,16 +25,16 @@ const getThresholdValueByGardenId = async (GardenId) => {
     }
 }
 
-// in: GardenId, sensorType, upperValue, lowerValue
-// update threshold value with sensorTypeId
+// in: GardenId, SensorId, upperValue, lowerValue
+// update threshold value with SensorIdId
 // return: {message, code, data: rowAffected}
-// sensorType: nhietdo, doamdat, doamkk, anhsang
-const updateThresholdOfGarden = async (GardenId, sensorType, newUpper, newLower) => {
-    const existSensorType = ['nhietdo', 'doamdat', 'doamkk', 'anhsang']
-    if (!existSensorType.includes(sensorType)){
-        console.log('not find sensorTypeId');
+// SensorId: nhietdo, doamdat, doamkk, anhsang
+const updateThresholdOfGarden = async (GardenId, SensorId, newUpper, newLower) => {
+    const existSensorId = ['nhietdo', 'doamdat', 'doamkk', 'anhsang']
+    if (!existSensorId.includes(SensorId)){
+        console.log('not find SensorIdId');
         return {
-            EM: 'Error: not find sensorTypeId',
+            EM: 'Error: not find SensorIdId',
             EC: -2,
             DT: ''
         }
@@ -46,11 +46,11 @@ const updateThresholdOfGarden = async (GardenId, sensorType, newUpper, newLower)
         let updatedLower = null
 
         if (newUpper != null){
-            updatedUpper = await db.Threshold.update({ value: newUpper }, { where: { GardenId: GardenId, sensorType: sensorType, isUpperBound: true } });
+            updatedUpper = await db.Threshold.update({ value: newUpper }, { where: { GardenId: GardenId, SensorId: SensorId, isUpperBound: true } });
         }
 
         if (newLower != null){
-            updatedLower = await db.Threshold.update({ value: newLower }, { where: { GardenId: GardenId, sensorType: sensorType, isUpperBound: false } });
+            updatedLower = await db.Threshold.update({ value: newLower }, { where: { GardenId: GardenId, SensorId: SensorId, isUpperBound: false } });
         }
 
         // console.log(updatedLower)

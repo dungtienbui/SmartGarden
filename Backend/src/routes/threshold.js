@@ -7,7 +7,7 @@ import thresholdController from '../controllers/thresholdController';
 router.get('/value/:gardenId', thresholdController.getThresholdValueByGardenId);
 
 //[post] /update/light-intensive/:gardenId . post a object {upperValue, lowerValue}
-router.post('/update/:sensorType/:gardenId', thresholdController.updateThresholdOfGarden)
+router.post('/update/:sensorId/:gardenId', thresholdController.updateThresholdOfGarden)
 
 export default router;
 

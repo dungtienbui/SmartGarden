@@ -1,4 +1,4 @@
-import thesholdService from '../services/thesholdService';
+import thresholdService from '../services/thresholdService';
 
 
 const serverErr = {
@@ -23,7 +23,7 @@ class thresholdController {
         }
 
         try {
-            const data = await thesholdService.getThresholdValueByGardenId(gardenId);
+            const data = await thresholdService.getThresholdValueByGardenId(gardenId);
             return res.status(200).json({
                 EM: data.EM,
                 EC: data.EC,
@@ -35,17 +35,17 @@ class thresholdController {
     }
 
 
-    //[post] /update/:sensorType/:sensorType/:gardenId . post a object {upperValue, lowerValue}
+    //[post] /update/:sensorId/:sensorId/:gardenId . post a object {upperValue, lowerValue}
     async updateThresholdOfGarden(req, res) {
 
         const gardenId = parseInt(req.params.gardenId);
 
-        const sensorType = req.params.sensorType;
+        const sensorId = req.params.sensorId;
 
-        const existSensorType = ['nhietdo', 'doamdat', 'doamkk', 'anhsang']
+        const existSensorId = ['nhietdo', 'doamdat', 'doamkk', 'anhsang']
 
-        if (!existSensorType.includes(sensorType)) {
-            return res.status(444).json({ message: `Can't update because sensorTypeError` });
+        if (!existSensorId.includes(sensorId)) {
+            return res.status(444).json({ message: `Can't update because sensorIdError` });
         }
 
         if (!Number.isInteger(gardenId)) {
@@ -60,16 +60,16 @@ class thresholdController {
         }
 
         try {
-            const reponse = await thesholdService.updateThresholdOfGarden(gardenId, sensorType, newUpper, newLower);
+            const response = await thresholdService.updateThresholdOfGarden(gardenId, sensorId, newUpper, newLower);
 
-            if (reponse.EC == 0) {
-                if (reponse.DT != 0) {
-                    return res.status(200).json({ message: `Threshold updated successfully: ${reponse.EM}` });
+            if (response.EC == 0) {
+                if (response.DT != 0) {
+                    return res.status(200).json({ message: `Threshold updated successfully: ${response.EM}` });
                 } else {
                     return res.status(200).json({ message: "No have record to update" });
                 }
             } else {
-                return res.status(444).json({ message: `Has some error. ${reponse.EM}` });
+                return res.status(444).json({ message: `Has some error. ${response.EM}` });
             }
 
         } catch (error) {

@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      sensorType: {
+      SensorId: {
         type: Sequelize.STRING
       },
       unit: {

@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Threshold.init({
-    sensorType: DataTypes.STRING,
+    SensorId: DataTypes.STRING,
     unit: DataTypes.STRING,
     value: DataTypes.STRING,
     isUpperBound: DataTypes.BOOLEAN,

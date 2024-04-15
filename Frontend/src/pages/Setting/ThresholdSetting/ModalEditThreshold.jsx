@@ -23,7 +23,7 @@ function ModalEditThreshold(prop) {
         nhietdo: 'Nhiệt độ',
     };
 
-    const isSensorTypeValid = existTitle[prop.objectSetting.sensorType] !== undefined ? true : false;
+    const isSensorIdValid = existTitle[prop.objectSetting.sensorId] !== undefined ? true : false;
 
     const checkConstraints = () => {
         // // Xử lý khi người dùng lưu dữ liệu
@@ -70,7 +70,7 @@ function ModalEditThreshold(prop) {
                 try {
                     const response = await updateThresholdOfGarden(
                         prop.objectSetting.gardenId,
-                        prop.objectSetting.sensorType,
+                        prop.objectSetting.sensorId,
                         newUpper,
                         newLower,
                     );
@@ -107,8 +107,7 @@ function ModalEditThreshold(prop) {
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Chỉnh sửa ngưỡng:{' '}
-                        {isSensorTypeValid ? existTitle[prop.objectSetting.id] : 'SensorType error!!!'}
+                        Chỉnh sửa ngưỡng: {isSensorIdValid ? existTitle[prop.objectSetting.id] : 'SensorId error!!!'}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -193,7 +192,7 @@ function ModalEditThreshold(prop) {
                         Huỷ
                     </Button>
 
-                    <Button variant="primary" onClick={handleSave} disabled={!isSensorTypeValid}>
+                    <Button variant="primary" onClick={handleSave} disabled={!isSensorIdValid}>
                         Lưu
                     </Button>
                 </Modal.Footer>

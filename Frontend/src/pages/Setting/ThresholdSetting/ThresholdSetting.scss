@@ -1,28 +1,30 @@
-.title {
-    font-weight: 500;
-    // border-bottom: 2px solid #999;
-}
-
-.garden-selection {
-    width: 15rem;
-    .garden-icon {
-        background-color: #a2ef99;
-        opacity: 80%;
-        font-size: 5rem;
-        text-align: center;
-    }
-}
-
-.garden-selection:hover {
-    // width: 16em;
-    .garden-icon {
-        background-color: rgb(32, 170, 69);
-        opacity: 100%;
+.threshold-setting-page {
+    .title {
+        font-weight: 500;
+        // border-bottom: 2px solid #999;
     }
 
-    .garden-name {
-        font-size: larger;
+    .garden-selection {
+        width: 15rem;
+        .garden-icon {
+            background-color: #a2ef99;
+            opacity: 80%;
+            font-size: 5rem;
+            text-align: center;
+        }
     }
 
-    // transition: 200ms ease-in;
+    .garden-selection:hover {
+        // width: 16em;
+        .garden-icon {
+            background-color: rgb(32, 170, 69);
+            opacity: 100%;
+        }
+
+        .garden-name {
+            font-size: larger;
+        }
+
+        // transition: 200ms ease-in;
+    }
 }

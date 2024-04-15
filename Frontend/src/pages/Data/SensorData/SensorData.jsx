@@ -41,7 +41,6 @@ function SensorData() {
 
         const baseUrl = import.meta.env.VITE_BACKEND_URL;
         const eventSource = new EventSource(baseUrl + `/sensor/data/last/${sensorId}`);
-
         if (+gardenId === 1) {
             eventSource.onmessage = async (event) => {
                 let eventData = JSON.parse(event.data);
