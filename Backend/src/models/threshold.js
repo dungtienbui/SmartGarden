@@ -11,15 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Threshold.belongsTo(models.Garden)
+      Threshold.belongsTo(models.Sensor)
     }
   }
   Threshold.init({
     SensorId: DataTypes.STRING,
-    unit: DataTypes.STRING,
-    value: DataTypes.STRING,
-    isUpperBound: DataTypes.BOOLEAN,
-    GardenId: DataTypes.INTEGER
+    upperBound: DataTypes.INTEGER,
+    lowerBound: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Threshold',

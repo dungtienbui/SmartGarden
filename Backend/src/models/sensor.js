@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Sensor.belongsTo(models.Garden)
       Sensor.hasMany(models.MeasuredValue)
+      Sensor.hasOne(models.Threshold)
     }
   }
   Sensor.init({
