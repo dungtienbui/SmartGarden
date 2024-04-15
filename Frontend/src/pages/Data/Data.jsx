@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { getNewestData } from '../../services/adafruitService';
-import { getAllSensor } from '../../services/webService';
+import { getNewestData } from '../../services/webService';
 import LiveClock from '../../components/LiveClock';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -49,24 +48,16 @@ function Data() {
     const [envData, setEnvData] = useState(sampleData);
     useEffect(() => {
         let stopGetting = false;
-        const getUnit = async () => {
-            const raw = await getAllSensor(1);
-            let data = [...sampleData];
-            for (let i = 0; i < data.length; i++) {
-                data[i].unit = raw.DT[i].unit;
-            }
-        };
         const getData = async () => {
             const raw = await getNewestData(gardenId);
             let data = [...sampleData];
             for (let i = 0; i < raw.length; i++) {
-                data[i] = { ...data[i], time: raw[i].time, value: raw[i].value };
+                data[i] = { ...data[i], time: raw[i].time, value: raw[i].value, unit: raw[i].unit };
             }
             if (!stopGetting) {
                 setEnvData(data);
             }
         };
-        getUnit();
         getData();
         const intervalId = setInterval(() => getData(), 2000);
         return () => {

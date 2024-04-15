@@ -62,7 +62,6 @@ function SetGardenThreshold() {
 
     const [toggleEditValue, setToggleEditValue] = useState(false);
 
-
     useEffect(() => {
         const fetchData = async () => {
             const typeSensor = {
@@ -84,14 +83,14 @@ function SetGardenThreshold() {
                 // console.log(data[0])
 
                 for (const raw of raws) {
-                    data[typeSensor[raw.sensorType]][typeValue[raw.isUpperBound]] = raw.value
-                    data[typeSensor[raw.sensorType]]['unit'] = raw.unit
+                    data[typeSensor[raw.sensorType]][typeValue[raw.isUpperBound]] = raw.value;
+                    data[typeSensor[raw.sensorType]]['unit'] = raw.unit;
                 }
 
                 // console.log(raws)
                 // console.log(data)
 
-                setThresholdData(data)
+                setThresholdData(data);
             } catch (error) {
                 console.error('Error fetching garden:', error);
             }
@@ -132,9 +131,16 @@ function SetGardenThreshold() {
                         </div>
                         <div className="align-self-center ms-3 me-3">
                             <ModalEditThreshold
-                                objectSetting={{ gardenId: params.gardenId, sensorType: data.id, currUpper: data.upperValue, currLower: data.lowerValue, max: data.max, min: data.min}}
+                                objectSetting={{
+                                    gardenId: params.gardenId,
+                                    sensorType: data.id,
+                                    currUpper: data.upperValue,
+                                    currLower: data.lowerValue,
+                                    max: data.max,
+                                    min: data.min,
+                                }}
                                 setToggleEditValue={setToggleEditValue}
-                                toggleEditValue = {toggleEditValue}
+                                toggleEditValue={toggleEditValue}
                             />
                         </div>
                     </div>

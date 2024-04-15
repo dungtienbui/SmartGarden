@@ -12,11 +12,13 @@ class sensorController {
     async getAllSensor(req, res) {
         try {
             const allSensor = await webService.getAllSensor(req.query.gardenId);
-            return res.status(200).json({
-                EM: allSensor.EM,
-                EC: allSensor.EC,
-                DT: allSensor.DT
-            })
+            if (allSensor) {
+                return res.status(200).json({
+                    EM: allSensor.EM,
+                    EC: allSensor.EC,
+                    DT: allSensor.DT
+                });
+            }
         } catch (err) {
             return res.status(500).json(serverErr);
         }
@@ -24,12 +26,31 @@ class sensorController {
 
     async getSensorInfo(req, res) {
         try {
-            const sensor = await webService.getSensorInfo(req.params.sensorId);
+            const lastValue = await webService.getSensorInfo(req.params.sensorId);
+            if (lastValue) {
+                return res.status(200).json({
+                    EM: lastValue.EM,
+                    EC: lastValue.EC,
+                    DT: lastValue.DT
+                });
+            }
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    }
+
+    async getLastValue(req, res) {
+        try {
+            const raw = await webService.getLastValueWithSensor(req.params.sensorId);
+            let lastValue = raw;
+            if (raw && raw.EC === 0) {
+                lastValue.DT = { time: raw.DT.timestamp.toLocaleString(), value: raw.DT.value, unit: raw.DT.Sensor.unit };
+            }
             return res.status(200).json({
-                EM: sensor.EM,
-                EC: sensor.EC,
-                DT: sensor.DT
-            })
+                EM: lastValue.EM,
+                EC: lastValue.EC,
+                DT: lastValue.DT
+            });
         } catch (err) {
             return res.status(500).json(serverErr);
         }
@@ -75,16 +96,16 @@ class sensorController {
             
             const rawData = await webService.getDataChart(req.params.sensorId, +req.query.limit);
             let prev;
-            if (rawData.EC === 0){
+            if (rawData && rawData.EC === 0){
                 res.write(`data: ${JSON.stringify(rawData.DT)}\n\n`);
                 prev = rawData.DT.time.findLast((t) => t);
             }
             const timerId = setInterval(async () => {
                 const lastValue = await webService.getLastValue(req.params.sensorId);
-                if (lastValue.EC === 0) {
-                    if (lastValue.DT.timestamp > prev) {
+                if (lastValue && lastValue.EC === 0) {
+                    if (prev || lastValue.DT.timestamp > prev) {
                         const rawData = await webService.getDataChart(req.params.sensorId, +req.query.limit);
-                        if (rawData.EC === 0){
+                        if (rawData && rawData.EC === 0) {
                             res.write(`data: ${JSON.stringify(rawData.DT)}\n\n`);
                             prev = rawData.DT.time.findLast((t) => t !== '');
                         }
@@ -93,6 +114,34 @@ class sensorController {
             }, process.env.TIME_INTERVAL);
 
             req.on('close', () => clearInterval(timerId));
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    }
+
+    async getPageData(req, res) {
+        try {
+            const sensorId = req.params.sensorId;
+            const { page, limit, from, to } = req.query;
+            let start = from !== '' ? new Date(from) : null;
+            let end = to !== '' ? new Date(to) : null;
+            if (start && end) {
+                if (start >= end) {
+                    return res.json({
+                        EM: "Ngày bắt đầu phải trước ngày kết thúc !",
+                        EC: -1,
+                        DT: [] 
+                    });
+                }
+            }
+            const pageData = await webService.getPageData(sensorId, +page, +limit, start, end);
+            if (pageData) {
+                return res.status(200).json({
+                    EM: pageData.EM,
+                    EC: pageData.EC,
+                    DT: pageData.DT 
+                });
+            }
         } catch (err) {
             return res.status(500).json(serverErr);
         }

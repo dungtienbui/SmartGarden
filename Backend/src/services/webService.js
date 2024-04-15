@@ -1,6 +1,5 @@
-import { where } from 'sequelize';
 import db from '../models';
-import adafruitService from './adafruitService';
+const Op = db.Sequelize.Op;
 import queryService from './queryService';
 
 
@@ -26,9 +25,9 @@ const getAllGarden = async () => {
     }
 };
 
-const getLastSavedValue = async (sensorId) => {
+const getLastValueWithSensor = async (sensorId) => {
     try {
-        const lastValue = await queryService.getLastSavedValue(sensorId);
+        const lastValue = await queryService.getLastValueWithSensor(sensorId);
         if (lastValue) {
             return {
                 EM: 'Get succeed',
@@ -106,6 +105,37 @@ const getDataChart = async (SensorId, limit) => {
     }
 };
 
+const getPageData = async (SensorId, page, limit, start, end) => {
+    try {
+        let whereCondition;
+        if (start && end) whereCondition = { SensorId, timestamp: { [Op.between]: [start, end] }}
+        else if (start) whereCondition = { SensorId, timestamp: { [Op.gte]: start }}
+        else if (end) whereCondition = { SensorId, timestamp: { [Op.lt]: end }}
+        else whereCondition = { SensorId }
+    
+        const offset = (page - 1)*limit;
+        const { count, rows } = await db.MeasuredValue.findAndCountAll({
+            attributes: { exclude: ['id'] },
+            where: whereCondition,
+            order: [['timestamp', 'DESC']],
+            offset, limit, 
+            raw: true
+        });
+        const data = rows.map((row) => ({time: row.timestamp.toLocaleString(), value: row.value }))
+        const pageData = { numRow: count, numPage: Math.ceil(count/limit), data }
+        if (pageData) {
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: pageData
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr
+    }
+};
+
 const getLastValue = async (SensorId) => {
     try {
         const lastValue = await db.MeasuredValue.findOne({
@@ -127,5 +157,8 @@ const getLastValue = async (SensorId) => {
     }
 };
 
-module.exports = { getAllGarden, getLastSavedValue, getAllSensor, getSensorInfo, getDataChart, getLastValue };
+module.exports = { 
+    getAllGarden, getLastValueWithSensor, getAllSensor, 
+    getSensorInfo, getDataChart, getPageData, getLastValue              
+};
 

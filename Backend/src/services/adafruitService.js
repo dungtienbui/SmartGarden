@@ -9,7 +9,7 @@ const saveNewestData = async () => {
         const sensorIds = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
         for (const sensorId of sensorIds) {
             const newestValue = await axios.get('/' + sensorId + '/data/last', { params: { 'x-aio-key': key } });
-            const lastSavedValue = await queryService.getLastSavedValue(sensorId);
+            const lastSavedValue = await queryService.getLastValueWithSensor(sensorId);
             if (!lastSavedValue || (lastSavedValue && new Date(lastSavedValue.timestamp) < new Date(newestValue.created_at))) {
                 await queryService.saveNewestValue(new Date(newestValue.created_at), sensorId, newestValue.value, false);
             }

@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../services/userService';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
@@ -7,7 +6,6 @@ function ModalLogout({ show, handleClose }) {
     const navigate = useNavigate();
     const handleLogout = () => {
         sessionStorage.removeItem('loginValue');
-        logout();
         navigate('/login');
     };
     return (

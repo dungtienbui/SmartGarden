@@ -16,11 +16,14 @@
             &:hover {
                 background-color: #eee;
             }
+            .time {
+                width: 210px;
+            }
         }
     }
     .pagination {
         button {
-            font-weight: 500;
+            height: max-content;
         }
     }
 }

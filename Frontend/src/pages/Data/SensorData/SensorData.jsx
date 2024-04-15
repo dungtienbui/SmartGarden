@@ -89,10 +89,10 @@ function SensorData() {
                             </div>
                         </div>
                         {/* <div className="threshold text-center mt-1">
-                            <h4 className="fw-normal">Ngưỡng giá trị</h4>
-                            <p className="mb-0">Trên : 200 {unit}</p>
-                            <p>Dưới: 100 {unit}</p>
-                        </div> */}
+                                <h4 className="fw-normal">Ngưỡng giá trị</h4>
+                                <p className="mb-0">Trên : 200 {unit}</p>
+                                <p>Dưới: 100 {unit}</p>
+                            </div> */}
                     </div>
                     <div className="dashboard mt-4 pt-2">
                         <h4 className="fw-normal text-center">Biểu đồ giá trị mới nhất</h4>
@@ -100,7 +100,7 @@ function SensorData() {
                     </div>
                 </div>
                 <div className="col right ps-4">
-                    <h4 className="fw-normal text-center my-3">Lịch sử giá trị</h4>
+                    <h4 className="fw-normal text-center my-3 py-1">Lịch sử giá trị</h4>
                     <HistoryTable gardenId={gardenId} sensorId={sensorId} />
                 </div>
             </div>

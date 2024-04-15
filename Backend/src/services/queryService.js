@@ -12,7 +12,7 @@ const getSensorById = async (SensorId) => {
     }
 };
 
-const getLastSavedValue = async (SensorId) => {
+const getLastValueWithSensor = async (SensorId) => {
     try {
         const lastValue = await db.MeasuredValue.findOne({
             attributes: { exclude: ['id'] },
@@ -39,4 +39,4 @@ const saveNewestValue = async (timestamp, SensorId, value, isOutThreshold) => {
     }
 }
 
-module.exports = { getSensorById, getLastSavedValue, saveNewestValue };
+module.exports = { getSensorById, getLastValueWithSensor, saveNewestValue };

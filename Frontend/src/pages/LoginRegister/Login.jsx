@@ -20,10 +20,12 @@ function Login() {
         setIsValid(defaultIsValid);
         if (!username) {
             setIsValid({ ...isValid, username: false });
+            alert('Username and password are required !');
             return;
         }
         if (!password) {
             setIsValid({ ...isValid, password: false });
+            alert('Username and password are required !');
             return;
         }
         const res = await login(username.trim(), password);
@@ -34,7 +36,7 @@ function Login() {
                 navigate('/data');
             } else {
                 setIsValid({ username: false, password: false });
-                alert('Sai tài khoản hoặc mật khẩu');
+                alert(res.EM);
             }
         }
     };

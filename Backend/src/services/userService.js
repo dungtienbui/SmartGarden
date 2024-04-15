@@ -30,7 +30,7 @@ const login = async (username, userpass) => {
         }
         return {
             EM: 'Wrong username or password !',
-            EC: 1,
+            EC: -1,
             DT: ''
         }
     } catch (err){
@@ -39,7 +39,4 @@ const login = async (username, userpass) => {
     }
 };
 
-const logout = () => {
-}
-
-module.exports = { hashPassword, login, logout };
+module.exports = { hashPassword, login };
