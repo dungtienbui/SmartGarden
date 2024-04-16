@@ -65,9 +65,11 @@ function Control() {
                 {envData.map((data, index) => (
                     <div key={index}>
                         <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4">
+                            
                             <div className="bulb p-2">
                                 <div className="icon p-2 rounded-4">
-                                    <div className="default-layout" style={{ backgroundImage: `url(${bulb})` }}></div>
+                                    <img className="default-layout" src={bulb} alt="đèn" />
+                                    
                                     <h4 className="title">đèn</h4>
                                 </div>
                                 <div className="bulb-set">
@@ -110,7 +112,7 @@ function Control() {
                         <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4" key={index}>
                             <div className="bulb p-2">
                                 <div className="icon p-2 rounded-4">
-                                    <div className="default-layout" style={{ backgroundImage: `url(${pump})` }}></div>
+                                    <img className="default-layout" src={pump} alt="bơm" />
                                     <h4 className="title">máy bơm</h4>
                                 </div>
                             </div>
