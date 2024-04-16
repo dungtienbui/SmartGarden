@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Garden.hasMany(models.Threshold)
       Garden.hasMany(models.Sensor)
       Garden.hasMany(models.Device)
     }

@@ -1,5 +1,4 @@
 import axios from '../utils/axios';
-import db from '../models';
 import queryService from './queryService';
 require('dotenv').config()
 
@@ -11,7 +10,8 @@ const saveNewestData = async () => {
             const newestValue = await axios.get('/' + sensorId + '/data/last', { params: { 'x-aio-key': key } });
             const lastSavedValue = await queryService.getLastValueWithSensor(sensorId);
             if (!lastSavedValue || (lastSavedValue && new Date(lastSavedValue.timestamp) < new Date(newestValue.created_at))) {
-                await queryService.saveNewestValue(new Date(newestValue.created_at), sensorId, newestValue.value, false);
+                const isOutThreshold = await queryService.checkThreshold(sensorId, newestValue.value);
+                await queryService.saveNewestValue(new Date(newestValue.created_at), sensorId, newestValue.value, isOutThreshold);
             }
         }
     } catch (err) {

@@ -27,9 +27,22 @@ const getLastValueWithSensor = async (SensorId) => {
         return lastValue;
     } catch (err) {
         console.log(err);
-        return null
+        return
     }
 };
+
+const checkThreshold = async (SensorId, value) => {
+    try {
+        const threshold = await db.Threshold.findOne({
+            attributes: { exclude: ['id'] },
+            where: { SensorId },
+            raw: true
+        });
+        return threshold.lowerBound ? value > threshold.lowerBound : false
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 const saveNewestValue = async (timestamp, SensorId, value, isOutThreshold) => {
     try {
@@ -39,4 +52,4 @@ const saveNewestValue = async (timestamp, SensorId, value, isOutThreshold) => {
     }
 }
 
-module.exports = { getSensorById, getLastValueWithSensor, saveNewestValue };
+module.exports = { getSensorById, getLastValueWithSensor, checkThreshold, saveNewestValue };

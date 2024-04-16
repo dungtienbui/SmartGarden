@@ -4,6 +4,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Threshold', {
       SensorId: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       upperBound: {
