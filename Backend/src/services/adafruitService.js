@@ -18,9 +18,36 @@ const saveNewestData = async () => {
         console.log(err);
     }
 }
+const getDeviceCondition = async (device) => {
+    try {
+        const newestValue = await axios.get('/' + device + '/data/last', { params: { 'x-aio-key': key } });
+        const deviceData = {
+            device,
+            value: parseInt(newestValue.value),
+            time: new Date(newestValue.created_at),
+             };
+        return deviceData;
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+}
+
+const postDeviceCondition = async (device, value) => {
+    try {
+        console.log(device, value)
+        const data = {  value: value  };
+        const response = await axios.post('/'+ device  + '/data', data, { params: { 'x-aio-key': key } });
+        return value;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};
+
 
 const updateData = () => {
     const timerId = setInterval(async () => {await saveNewestData()}, process.env.TIME_INTERVAL)
 }
 
-module.exports = { updateData };
+module.exports = { updateData, getDeviceCondition, postDeviceCondition };

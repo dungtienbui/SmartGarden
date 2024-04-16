@@ -1,60 +1,74 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import LiveClock from '../../components/LiveClock';
+import { getdvcondition, changedevice } from '../../services/deviceService';
 
-import { BsToggleOff } from 'react-icons/bs';
-import { BsToggleOn } from 'react-icons/bs';
+import { BsToggleOff,BsToggleOn  } from 'react-icons/bs';
 
 import bulb from '../../assets/bulb.svg';
 import pump from '../../assets/pump.png';
 import './Control.scss';
 
 function Control() {
-    const [envData, setEnvData] = useState([]);
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const gardenId = searchParams.get('gardenId');
+    const dvData=[
+        {
+            dvId: "den",
+            title: "đèn",
+            condition: 0,
+            threshold:0,
+            icon: bulb,
+            value: "0",
+            total:"3"
+        },
+        {
+            dvId: "maybom",
+            title:"máy bơm",
+            condition: 0,
+            threshold:0,
+            icon:pump,
+            value: "0",
+            total:"3"
+        },
+    ]
+    const [envData, setEnvData] = useState(dvData);
     useEffect(() => {
-        const res1 = [
-            {
-                condition1: false,
-                threshold1: false,
-                value1: '3',
-                total1: '3',
-
-                condition2: true,
-                threshold2: true,
-                value2: '2',
-                total2: '3',
-            },
-        ];
-        if (gardenId == 'g1') {
-            setEnvData(res1);
-        } else {
-            setEnvData(res1);
-        }
+        const dv=['den','maybom'];
+        let stopGetting = false;
+        const getData = async () => {            
+            let data = [...dvData];
+            for (let i = 0; i < dv.length; i++) {
+                const raw = await getdvcondition(gardenId, dv[i]);
+                
+                data[i] = { ...data[i], time: raw.time, condition: raw.value};
+            }
+            if (!stopGetting) {
+                setEnvData(data);
+            }
+        };
+        getData();
+        const intervalId = setInterval(() => getData(), 2000);
+        return () => {
+            clearInterval(intervalId);
+            setEnvData(dvData);
+            stopGetting = true;
+        };
     }, [gardenId]);
 
     const handleClick1 = (index) => {
         const updatedEnvData = [...envData];
-        updatedEnvData[index].condition1 = !updatedEnvData[index].condition1;
+        updatedEnvData[index].condition = 1 - updatedEnvData[index].condition;
+        const s = async() =>{
+            const a= await changedevice(updatedEnvData[index].dvId,updatedEnvData[index].condition); }
+        s();        
         setEnvData(updatedEnvData);
     };
 
     const handleClick2 = (index) => {
         const updatedEnvData = [...envData];
-        updatedEnvData[index].threshold1 = !updatedEnvData[index].threshold1;
-        setEnvData(updatedEnvData);
-    };
-
-    const handleClick3 = (index) => {
-        const updatedEnvData = [...envData];
-        updatedEnvData[index].condition2 = !updatedEnvData[index].condition2;
-        setEnvData(updatedEnvData);
-    };
-
-    const handleClick4 = (index) => {
-        const updatedEnvData = [...envData];
-        updatedEnvData[index].threshold2 = !updatedEnvData[index].threshold2;
+        updatedEnvData[index].threshold = 1- updatedEnvData[index].threshold;
         setEnvData(updatedEnvData);
     };
 
@@ -65,23 +79,24 @@ function Control() {
                 {envData.map((data, index) => (
                     <div key={index}>
                         <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4">
-                            
                             <div className="bulb p-2">
                                 <div className="icon p-2 rounded-4">
-                                    <img className="default-layout" src={bulb} alt="đèn" />
+                                    <img className="default-layout" src={data.icon} alt={data.title} />
                                     
-                                    <h4 className="title">đèn</h4>
+                                    <h4 className="title">{data.title}</h4>
                                 </div>
-                                <div className="bulb-set">
-                                    <h5 className="title mt-1 mb-1">Cài đặt đèn</h5>
-                                </div>
+                                {data.dvId === "den" && (
+                                    <div className="bulb-set">
+                                        <h5 className="title mt-1 mb-1">Cài đặt {data.title}</h5>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="data ps-3">
                                 <div className="title line-bt1">
-                                    <div className="s">Trạng thái: {data.condition1 ? 'đang bật' : 'đang tắt'}</div>
+                                    <div className="s">Trạng thái: {data.condition===1 ? 'đang bật' : 'đang tắt'}</div>
                                     <div key={index} className="o" onClick={() => handleClick1(index)}>
-                                        {data.condition1 ? (
+                                        {data.condition === 1 ? (
                                             <BsToggleOn className="toggle" color="green" />
                                         ) : (
                                             <BsToggleOff className="toggle" color="red" />
@@ -89,9 +104,9 @@ function Control() {
                                     </div>
                                 </div>
                                 <div className="title line-bt1">
-                                    <div className="s">Tự động bật đèn khi ánh sáng dưới: </div>
+                                    <div className="s">Tự động bật {data.title} khi dưới ngưỡng: {data.threshold===1 ? 'bật' : 'tắt'} </div>
                                     <div key={index} className="o" onClick={() => handleClick2(index)}>
-                                        {data.threshold1 ? (
+                                        {data.threshold === 1 ? (
                                             <BsToggleOn className="toggle" color="green" />
                                         ) : (
                                             <BsToggleOff className="toggle" color="red" />
@@ -100,7 +115,7 @@ function Control() {
                                 </div>
                                 <div className="title">
                                     <div className="s">
-                                        Lịch trình: {data.value1}/{data.total1}
+                                        Lịch trình: {data.value}/{data.total}
                                     </div>
                                     <div className="t m-md-3 d-flex align-items-center justify-content-center">
                                         Thiết lập
@@ -109,45 +124,6 @@ function Control() {
                             </div>
                         </div>
 
-                        <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4" key={index}>
-                            <div className="bulb p-2">
-                                <div className="icon p-2 rounded-4">
-                                    <img className="default-layout" src={pump} alt="bơm" />
-                                    <h4 className="title">máy bơm</h4>
-                                </div>
-                            </div>
-
-                            <div className="data ps-3">
-                                <div className="title line-bt1">
-                                    <div className="s">Trạng thái: {data.condition2 ? 'đang bật' : 'đang tắt'}</div>
-                                    <div key={index} className="o" onClick={() => handleClick3(index)}>
-                                        {data.condition2 ? (
-                                            <BsToggleOn className="toggle" color="green" />
-                                        ) : (
-                                            <BsToggleOff className="toggle" color="red" />
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="title line-bt1">
-                                    <div className="s">Tự động bật đèn khi ánh sáng dưới: </div>
-                                    <div key={index} className="o" onClick={() => handleClick4(index)}>
-                                        {data.threshold2 ? (
-                                            <BsToggleOn className="toggle" color="green" />
-                                        ) : (
-                                            <BsToggleOff className="toggle" color="red" />
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="title">
-                                    <div className="s">
-                                        Lịch trình: {data.value1}/{data.total1}
-                                    </div>
-                                    <div className="t m-md-3 d-flex align-items-center justify-content-center">
-                                        Thiết lập
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 ))}
             </div>
