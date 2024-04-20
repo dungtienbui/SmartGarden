@@ -19,8 +19,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Device.init({
     name: DataTypes.STRING,
-    type: DataTypes.STRING,
-    currentState: DataTypes.BOOLEAN,
     isAppliedThreshold: DataTypes.BOOLEAN,
     isAppliedSchedule: DataTypes.BOOLEAN,
     GardenId: DataTypes.INTEGER

@@ -8,10 +8,19 @@ const saveNewestData = async () => {
         const sensorIds = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
         for (const sensorId of sensorIds) {
             const newestValue = await axios.get('/' + sensorId + '/data/last', { params: { 'x-aio-key': key } });
-            const lastSavedValue = await queryService.getLastValueWithSensor(sensorId);
+            const lastSavedValue = await queryService.getLastSensorValue(sensorId);
             if (!lastSavedValue || (lastSavedValue && new Date(lastSavedValue.timestamp) < new Date(newestValue.created_at))) {
                 const isOutThreshold = await queryService.checkThreshold(sensorId, newestValue.value);
-                await queryService.saveNewestValue(new Date(newestValue.created_at), sensorId, newestValue.value, isOutThreshold);
+                await queryService.saveNewestSensorValue(new Date(newestValue.created_at), sensorId, newestValue.value, isOutThreshold);
+            }
+        }
+        const deviceIds = ['den', 'maybom'];
+        const currUser = await queryService.getCurrentUser();
+        for (const deviceId of deviceIds) {
+            const newestValue = await axios.get('/' + deviceId + '/data/last', { params: { 'x-aio-key': key } });
+            const lastSavedValue = await queryService.getLastDeviceValue(deviceId);
+            if (!lastSavedValue || (lastSavedValue && new Date(lastSavedValue.timestamp) < new Date(newestValue.created_at))) {
+                await queryService.saveNewestDeviceValue(new Date(newestValue.created_at), deviceId, newestValue.value, currUser);
             }
         }
     } catch (err) {
@@ -19,8 +28,36 @@ const saveNewestData = async () => {
     }
 }
 
+const getDeviceCondition = async (device) => {
+    try {
+        const newestValue = await axios.get('/' + device + '/data/last', { params: { 'x-aio-key': key } });
+        const deviceData = {
+            device,
+            value: parseInt(newestValue.value),
+            time: new Date(newestValue.created_at),
+        };
+        return deviceData;
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+}
+
+const postDeviceCondition = async (device, value) => {
+    try {
+        console.log(device, value)
+        const data = {  value: value  };
+        const response = await axios.post('/' + device  + '/data', data, { params: { 'x-aio-key': key } });
+        return value;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};
+
+
 const updateData = () => {
     const timerId = setInterval(async () => {await saveNewestData()}, process.env.TIME_INTERVAL)
 }
 
-module.exports = { updateData };
+module.exports = { updateData, getDeviceCondition, postDeviceCondition };

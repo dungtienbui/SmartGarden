@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.createTable('Lighting', {
       DeviceId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       color: {
         type: Sequelize.STRING

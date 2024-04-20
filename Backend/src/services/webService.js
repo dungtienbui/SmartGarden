@@ -136,7 +136,7 @@ const getPageData = async (SensorId, page, limit, start, end) => {
     }
 };
 
-const getLastValue = async (SensorId) => {
+const getLastSensorValue = async (SensorId) => {
     try {
         const lastValue = await db.MeasuredValue.findOne({
             attributes: { exclude: ['id'] },
@@ -159,6 +159,6 @@ const getLastValue = async (SensorId) => {
 
 module.exports = { 
     getAllGarden, getLastValueWithSensor, getAllSensor, 
-    getSensorInfo, getDataChart, getPageData, getLastValue              
+    getSensorInfo, getDataChart, getPageData, getLastSensorValue              
 };
 

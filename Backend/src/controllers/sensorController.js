@@ -39,7 +39,7 @@ class sensorController {
         }
     }
 
-    async getLastValue(req, res) {
+    async getLastSensorValue(req, res) {
         try {
             const raw = await webService.getLastValueWithSensor(req.params.sensorId);
             let lastValue = raw;
@@ -64,14 +64,14 @@ class sensorController {
                 'Connection': 'keep-alive'
             });
             
-            const lastValue = await webService.getLastValue(req.params.sensorId);
+            const lastValue = await webService.getLastSensorValue(req.params.sensorId);
             let prev;
             if (lastValue.EC === 0){
                 res.write(`data: ${JSON.stringify(lastValue.DT)}\n\n`);
                 prev = lastValue.DT.timestamp;
             }
             const timerId = setInterval(async () => {
-                const lastValue = await webService.getLastValue(req.params.sensorId);
+                const lastValue = await webService.getLastSensorValue(req.params.sensorId);
                 if (lastValue.EC === 0) {
                     if (lastValue.DT.timestamp > prev) {
                         res.write(`data: ${JSON.stringify(lastValue.DT)}\n\n`);
@@ -101,7 +101,7 @@ class sensorController {
                 prev = rawData.DT.time.findLast((t) => t);
             }
             const timerId = setInterval(async () => {
-                const lastValue = await webService.getLastValue(req.params.sensorId);
+                const lastValue = await webService.getLastSensorValue(req.params.sensorId);
                 if (lastValue && lastValue.EC === 0) {
                     if (prev || lastValue.DT.timestamp > prev) {
                         const rawData = await webService.getDataChart(req.params.sensorId, +req.query.limit);

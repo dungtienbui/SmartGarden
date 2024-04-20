@@ -17,7 +17,7 @@ const hashPassword = (password) =>{
 
 const login = async (username, userpass) => {
     try {
-        const userinfo = await User.findOne({ where: {username} });
+        const userinfo = await User.findOne({ where: {username}, raw: true });
         if (userinfo) {
             const check = bcrypt.compareSync(userpass, userinfo.password);
             if (check) {

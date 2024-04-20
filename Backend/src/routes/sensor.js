@@ -8,6 +8,6 @@ router.get('/info/:sensorId', sensorController.getSensorInfo);
 router.get('/data/chart/:sensorId', sensorController.sendDataChart);
 router.get('/data/page/:sensorId', sensorController.getPageData);
 router.get('/data/last/:sensorId', sensorController.sendLastValue);
-router.get('/data/new/:sensorId', sensorController.getLastValue);
+router.get('/data/new/:sensorId', sensorController.getLastSensorValue);
 
 export default router;

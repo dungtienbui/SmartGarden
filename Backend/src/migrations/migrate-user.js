@@ -20,6 +20,9 @@ module.exports = {
       },
       createdAt: {
         type: Sequelize.DATE
+      },
+      isOnline: {
+        type: Sequelize.BOOLEAN
       }
     });
   },

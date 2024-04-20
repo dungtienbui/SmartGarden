@@ -9,7 +9,7 @@ module.exports = {
       },
       DeviceId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       state: {
         type: Sequelize.BOOLEAN

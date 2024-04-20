@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Lighting.init({
-    DeviceId: DataTypes.INTEGER,
+    DeviceId: DataTypes.STRING,
     color: DataTypes.STRING,
     intensity: DataTypes.INTEGER
   }, {

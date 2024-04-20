@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   OperationLog.init({
     timestamp: DataTypes.DATE,
-    DeviceId: DataTypes.INTEGER,
+    DeviceId: DataTypes.STRING,
     state: DataTypes.BOOLEAN,
     operatedBy: DataTypes.STRING
   }, {
