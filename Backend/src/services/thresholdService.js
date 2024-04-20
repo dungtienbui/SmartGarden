@@ -11,7 +11,11 @@ const serviceErr = {
 // return: {message, code, data: thresholdData}
 const getThresholdValueByGardenId = async (GardenId) => {
     try {
-        const thresholdValue = await db.Threshold.findAll({ where: { GardenId }, raw: true });
+        const thresholdValue = await db.Threshold.findAll({
+            attributes: { exclude: ['id'] }, 
+            where: { GardenId }, 
+            raw: true 
+        });
         if (thresholdValue) {
             return {
                 EM: 'Get succeed',

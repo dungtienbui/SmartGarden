@@ -7,12 +7,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      upperBound: {
-        type: Sequelize.INTEGER
-      },
       lowerBound: {
         type: Sequelize.INTEGER
       },
+      upperBound: {
+        type: Sequelize.INTEGER
+      }
     });
   },
   async down(queryInterface, Sequelize) {

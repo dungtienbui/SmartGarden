@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     timestamp: DataTypes.DATE,
     SensorId: DataTypes.STRING,
     value: DataTypes.INTEGER,
-    isOutThreshold: DataTypes.BOOLEAN
+    isBelowLowerBound: DataTypes.BOOLEAN,
+    isAboveUpperBound: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'MeasuredValue',

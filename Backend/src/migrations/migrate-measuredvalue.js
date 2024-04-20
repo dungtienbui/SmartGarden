@@ -14,7 +14,10 @@ module.exports = {
       value: {
         type: Sequelize.INTEGER
       },
-      isOutThreshold: {
+      isBelowLowerBound: {
+        type: Sequelize.BOOLEAN
+      },
+      isAboveUpperBound: {
         type: Sequelize.BOOLEAN
       }
     });

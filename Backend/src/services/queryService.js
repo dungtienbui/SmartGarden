@@ -1,11 +1,17 @@
 import db from '../models';
 
-const getSensorById = async (SensorId) => {
+const geDeviceById = async (deviceId) => {
     try {
-        const sensor = await db.Sensor.findOne({
-            where: { SensorId },
-            raw: true,
-        });
+        const devices = await db.Device.findOne({ where: { id: deviceId }, raw: true });
+        return devices;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+const getSensorById = async (sensorId) => {
+    try {
+        const sensor = await db.Sensor.findOne({ where: { id: sensorId }, raw: true });
         return sensor;
     } catch (err) {
         console.log(err);
@@ -27,7 +33,7 @@ const getLastValueWithSensor = async (SensorId) => {
         return lastValue;
     } catch (err) {
         console.log(err);
-        return
+        return;
     }
 };
 
@@ -42,7 +48,7 @@ const getLastSensorValue = async (SensorId) => {
         return lastValue;
     } catch (err) {
         console.log(err);
-        return
+        return;
     }
 };
 
@@ -57,7 +63,7 @@ const getLastDeviceValue = async (DeviceId) => {
         return lastValue;
     } catch (err) {
         console.log(err);
-        return serviceErr
+        return serviceErr;
     }
 };
 
@@ -68,15 +74,20 @@ const checkThreshold = async (SensorId, value) => {
             where: { SensorId },
             raw: true
         });
-        return threshold.lowerBound ? value > threshold.lowerBound : false
+        const isBelowLowerBound = threshold.lowerBound ? value < threshold.lowerBound : false;
+        const isAboveUpperBound = threshold.upperBound ? value > threshold.upperBound : false;
+        return { isBelowLowerBound, isAboveUpperBound };
     } catch (err) {
         console.log(err);
     }
 }
 
-const saveNewestSensorValue = async (timestamp, SensorId, value, isOutThreshold) => {
+const saveNewestSensorValue = async (timestamp, SensorId, value, isBelowLowerBound, isAboveUpperBound) => {
     try {
-        await db.MeasuredValue.create({ timestamp, SensorId, value, isOutThreshold }, { fields: ['timestamp', 'SensorId', 'value', 'isOutThreshold'] });
+        await db.MeasuredValue.create(
+            { timestamp, SensorId, value, isBelowLowerBound, isAboveUpperBound }, 
+            { fields: ['timestamp', 'SensorId', 'value', 'isBelowLowerBound', 'isAboveUpperBound'] }
+        );
     } catch (err) {
         console.log(err);
     }
@@ -84,7 +95,10 @@ const saveNewestSensorValue = async (timestamp, SensorId, value, isOutThreshold)
 
 const saveNewestDeviceValue = async (timestamp, DeviceId, state, operatedBy) => {
     try {
-        await db.OperationLog.create({ timestamp, DeviceId, state, operatedBy }, { fields: ['timestamp', 'DeviceId', 'state', 'operatedBy'] });
+        await db.OperationLog.create(
+            { timestamp, DeviceId, state, operatedBy }, 
+            { fields: ['timestamp', 'DeviceId', 'state', 'operatedBy'] }
+        );
     } catch (err) {
         console.log(err);
     }
@@ -100,6 +114,6 @@ const getCurrentUser = async () => {
 }
 
 module.exports = { 
-    getSensorById, getLastValueWithSensor, getLastSensorValue, getLastDeviceValue, checkThreshold,
-    saveNewestSensorValue, saveNewestDeviceValue, getCurrentUser 
+    geDeviceById, getSensorById, getLastValueWithSensor, getLastSensorValue, getLastDeviceValue, 
+    checkThreshold, saveNewestSensorValue, saveNewestDeviceValue, getCurrentUser 
 };
