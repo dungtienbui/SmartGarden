@@ -123,8 +123,8 @@ class sensorController {
         try {
             const sensorId = req.params.sensorId;
             const { page, limit, from, to } = req.query;
-            let start = from !== '' ? new Date(from) : null;
-            let end = to !== '' ? new Date(to) : null;
+            let start = from !== '' ? new Date(new Date(from).toLocaleString("en-US", {timeZone: "GMT"})) : null;
+            let end = to !== '' ? new Date(new Date(to).toLocaleString("en-US", {timeZone: "GMT"})) : null;
             if (start && end) {
                 if (start >= end) {
                     return res.json({

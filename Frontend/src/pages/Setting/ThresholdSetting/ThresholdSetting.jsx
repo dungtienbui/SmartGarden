@@ -2,7 +2,6 @@ import './ThresholdSetting.scss';
 import { useNavigate } from 'react-router-dom';
 import { getAllGarden } from '../../../services/webService';
 import React, { useEffect, useState } from 'react';
-import LiveClock from '../../../components/LiveClock';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSeedling } from '@fortawesome/free-solid-svg-icons';
@@ -34,7 +33,7 @@ function ThresholdSetting() {
 
     // console.log(gardenData);
     return (
-        <div className="threshold-setting-page h-100 px-5 bg-white rounded-4 position-relative">
+        <div className="threshold-setting-page h-100 px-5 bg-white rounded-4">
             <div className="title p-3 w-100 position-relative">
                 <button className="btn btn-primary position-absolute" onClick={gobackSetting}>
                     Go Back
@@ -62,9 +61,6 @@ function ThresholdSetting() {
                         </div>
                     ))}
                 </div>
-            </div>
-            <div className="position-absolute bottom-0 end-0 m-4">
-                <LiveClock className={'fs-4 text-secondary text-end mt-3 me-2'} />
             </div>
         </div>
     );

@@ -114,16 +114,16 @@ const getPageData = async (SensorId, page, limit, start, end) => {
         else whereCondition = { SensorId }
     
         const offset = (page - 1)*limit;
-        const { count, rows } = await db.MeasuredValue.findAndCountAll({
+        let { count, rows } = await db.MeasuredValue.findAndCountAll({
             attributes: { exclude: ['id'] },
-            where: whereCondition,
             order: [['timestamp', 'DESC']],
+            where: whereCondition,
             offset, limit, 
             raw: true
         });
-        const data = rows.map((row) => ({time: row.timestamp.toLocaleString(), value: row.value }))
-        const pageData = { numRow: count, numPage: Math.ceil(count/limit), data }
-        if (pageData) {
+        if (rows) {
+            const data = rows.map((row) => ({time: row.timestamp.toLocaleString(), value: row.value }));
+            const pageData = { numRow: count, numPage: Math.ceil(count/limit), data };
             return {
                 EM: 'Get succeed',
                 EC: 0,

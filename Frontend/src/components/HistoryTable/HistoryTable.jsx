@@ -59,7 +59,13 @@ function HistoryTable({ gardenId, sensorId }) {
         if (res) {
             if (res.EC === 0) {
                 if (page > res.DT.numPage) {
-                    getData(res.DT.numPage, from, to);
+                    if (res.DT.numPage === 0) {
+                        setPageCount(0);
+                        setPageData([]);
+                        setCurrPage(1);
+                    } else {
+                        getData(res.DT.numPage, from, to);
+                    }
                 } else {
                     setPageCount(res.DT.numPage);
                     setPageData(res.DT.data);

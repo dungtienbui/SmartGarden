@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import LiveClock from '../../components/LiveClock';
 
 import { BsToggleOff } from 'react-icons/bs';
 import { BsToggleOn } from 'react-icons/bs';
@@ -149,7 +148,6 @@ function Control() {
                     </div>
                 ))}
             </div>
-            <LiveClock className={'fs-4 text-secondary text-end mt-3 me-2'} />
         </div>
     );
 }
