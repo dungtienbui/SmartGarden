@@ -2,8 +2,8 @@ import db from '../models';
 
 const geDeviceById = async (deviceId) => {
     try {
-        const devices = await db.Device.findOne({ where: { id: deviceId }, raw: true });
-        return devices;
+        const device = await db.Device.findOne({ where: { id: deviceId }, raw: true });
+        return device;
     } catch (err) {
         console.log(err);
     }
@@ -18,14 +18,14 @@ const getSensorById = async (sensorId) => {
     }
 };
 
-const getLastValueWithSensor = async (SensorId) => {
+const getLastValueWithSensor = async (sensorId) => {
     try {
         const lastValue = await db.MeasuredValue.findOne({
             attributes: { exclude: ['id'] },
             order: [['timestamp', 'DESC']],
             include: {
                 model: db.Sensor,
-                where: { id: SensorId },
+                where: { id: sensorId },
             },
             raw: true,
             nest: true

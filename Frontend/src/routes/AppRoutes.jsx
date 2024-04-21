@@ -14,7 +14,6 @@ import Register from '../pages/LoginRegister/Register';
 import GardenNav from '../layout/GardenNav/GardenNav';
 
 const privateRoutes = [
-    { path: '/', component: () => <Navigate to="/login" />, layout: DefaultLayout },
     {
         path: '/data',
         component: () => <WrapPrivate children={<GardenNav children={<Data />} />} />,
@@ -57,6 +56,7 @@ const privateRoutes = [
 ];
 
 const publicRoutes = [
+    { path: '/', component: () => <Navigate to="/login" /> },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
 ];

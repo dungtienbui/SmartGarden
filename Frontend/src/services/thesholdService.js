@@ -12,7 +12,7 @@ const getThresholdByGardenId = async (gardenId) => {
         return null;
     }
 
-    return await webAxios.get(`/threshold/value/${gardenId}`);
+    return await webAxios.get(`/setting/threshold/value/${gardenId}`);
 };
 
 // update light intensive threshold of garden with 'gardenId'
@@ -27,7 +27,7 @@ const updateThresholdOfGarden = async (gardenId, sensorId, newUpper, newLower) =
         return null;
     }
 
-    return await webAxios.post(`/threshold/update/${sensorId}/${gardenId}`, { newUpper, newLower });
+    return await webAxios.post(`/setting/threshold/update/${sensorId}/${gardenId}`, { newUpper, newLower });
 };
 
 export { getThresholdByGardenId, updateThresholdOfGarden };

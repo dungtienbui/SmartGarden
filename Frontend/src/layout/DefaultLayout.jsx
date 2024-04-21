@@ -16,7 +16,6 @@ function DefaultLayout({ children }) {
 
     return (
         <div className="default-layout" style={{ backgroundImage: `url(${background})` }}>
-            <Notification />
             <div className="header d-flex mb-3">
                 <div className="pages m-auto ps-5 d-flex">
                     {privateRoutes.map(
@@ -43,7 +42,11 @@ function DefaultLayout({ children }) {
                 </div>
                 <ModalLogout show={showModal} handleClose={handleClose} />
             </div>
-            <div className="container content">{children}</div>
+            <div className="container content">
+                <Notification sensorId="anhsang" deviceId="den" />
+                <Notification sensorId="doamdat" deviceId="maybom" />
+                {children}
+            </div>
         </div>
     );
 }
