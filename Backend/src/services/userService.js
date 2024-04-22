@@ -17,26 +17,42 @@ const hashPassword = (password) =>{
 
 const login = async (username, userpass) => {
     try {
-        const userinfo = await User.findOne({ where: {username}, raw: true });
+        const userinfo = await User.findOne({ where: { username }, raw: true });
         if (userinfo) {
             const check = bcrypt.compareSync(userpass, userinfo.password);
             if (check) {
+                await User.update({ isOnline: true }, { where: { username } });
                 return {
                     EM: 'Login succeed',
                     EC: 0,
                     DT: ''
-                }
+                };
             }
         }
         return {
             EM: 'Wrong username or password !',
             EC: -1,
             DT: ''
-        }
+        };
+    } catch (err){
+        console.log(err);
+        return serviceErr;
+    }
+};
+
+const logout = async () => {
+    try {
+        await User.update({ isOnline: false }, { where: { isOnline: true } });
+        return {
+            EM: 'Logout succeed',
+            EC: 0,
+            DT: ''
+        };
     } catch (err){
         console.log(err);
         return serviceErr
     }
-};
+}
 
-module.exports = { hashPassword, login };
+
+module.exports = { login, logout };

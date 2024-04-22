@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     timestamp: DataTypes.DATE,
     DeviceId: DataTypes.STRING,
     state: DataTypes.BOOLEAN,
+    isAppliedThreshold: DataTypes.BOOLEAN,
+    isAppliedSchedule: DataTypes.BOOLEAN,
     operatedBy: DataTypes.STRING
   }, {
     sequelize,

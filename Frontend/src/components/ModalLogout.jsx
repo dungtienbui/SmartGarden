@@ -1,12 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { logout } from '../services/userService';
 
 function ModalLogout({ show, handleClose }) {
     const navigate = useNavigate();
-    const handleLogout = () => {
-        sessionStorage.removeItem('loginValue');
-        navigate('/login');
+    const handleLogout = async () => {
+        const res = await logout();
+        if (res) {
+            if (+res.EC === 0) {
+                sessionStorage.removeItem('loginValue');
+                navigate('/login');
+            } else {
+                alert(res.EM);
+            }
+        }
     };
     return (
         <Modal show={show} onHide={handleClose} centered size="sm" className="pb-5">

@@ -14,6 +14,12 @@ module.exports = {
       state: {
         type: Sequelize.BOOLEAN
       },
+      isAppliedThreshold: {
+        type: Sequelize.BOOLEAN
+      },
+      isAppliedSchedule: {
+        type: Sequelize.BOOLEAN
+      },
       operatedBy: {
         type: Sequelize.STRING
       }

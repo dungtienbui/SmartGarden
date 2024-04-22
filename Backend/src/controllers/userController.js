@@ -30,6 +30,19 @@ class userController {
             return res.status(500).json(serverErr);
         }
     };
+
+    async logout(req, res) {
+        try {
+            const data = await userService.logout();
+            return res.status(200).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT
+            });
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    };
 };
 
 export default new userController();

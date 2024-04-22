@@ -93,11 +93,11 @@ const saveNewestSensorValue = async (timestamp, SensorId, value, isBelowLowerBou
     }
 }
 
-const saveNewestDeviceValue = async (timestamp, DeviceId, state, operatedBy) => {
+const saveNewestDeviceValue = async (timestamp, DeviceId, state, isAppliedThreshold, isAppliedSchedule, operatedBy) => {
     try {
         await db.OperationLog.create(
-            { timestamp, DeviceId, state, operatedBy }, 
-            { fields: ['timestamp', 'DeviceId', 'state', 'operatedBy'] }
+            { timestamp, DeviceId, state, isAppliedThreshold, isAppliedSchedule, operatedBy }, 
+            { fields: ['timestamp', 'DeviceId', 'state', 'isAppliedThreshold', 'isAppliedSchedule', 'operatedBy'] }
         );
     } catch (err) {
         console.log(err);
@@ -106,7 +106,7 @@ const saveNewestDeviceValue = async (timestamp, DeviceId, state, operatedBy) => 
 
 const getCurrentUser = async () => {
     try {
-        const currUser = await db.User.findOne({ where: {isOnline: true}, raw: true });
+        const currUser = await db.User.findOne({ where: { isOnline: true }, raw: true });
         return currUser ? currUser.username : "admin"
     } catch (err) {
         console.log(err);

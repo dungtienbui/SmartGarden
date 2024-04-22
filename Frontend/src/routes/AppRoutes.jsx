@@ -45,12 +45,12 @@ const privateRoutes = [
     },
     {
         path: 'setting/threshold-setting',
-        component: () => <WrapPrivate children={<ThresholdSetting />} />,
+        component: () => <WrapPrivate children={<GardenNav children={<SetGardenThreshold />} />} />,
         layout: DefaultLayout,
     },
     {
-        path: 'setting/threshold-setting/:gardenId',
-        component: () => <WrapPrivate children={<SetGardenThreshold />} />,
+        path: 'setting/account-settings',
+        component: () => <WrapPrivate children={<ThresholdSetting />} />,
         layout: DefaultLayout,
     },
 ];

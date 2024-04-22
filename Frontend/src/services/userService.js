@@ -4,4 +4,8 @@ const login = async (username, password) => {
     return await webAxios.post('/user/login', { username, password });
 };
 
-export { login };
+const logout = async () => {
+    return await webAxios.put('/user/logout');
+};
+
+export { login, logout };

@@ -100,7 +100,7 @@ function ModalEditThreshold(prop) {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="warning" onClick={handleShow}>
                 Chỉnh sửa
             </Button>
 
