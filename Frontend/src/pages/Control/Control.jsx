@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { getdvcondition, changedevice } from '../../services/deviceService';
+import { getdvcondition, changedevice, changeappliedThreshold, getdvappliedThreshold } from '../../services/deviceService';
 
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
 
@@ -40,7 +40,8 @@ function Control() {
             let data = [...dvData];
             for (let i = 0; i < dv.length; i++) {
                 const raw = await getdvcondition(gardenId, dv[i]);
-                data[i] = { ...data[i], time: raw.time, condition: raw.value };
+                const raw2 = await getdvappliedThreshold(gardenId, dv[i]);
+                data[i] = { ...data[i], time: raw.time, condition: raw.value, threshold: raw2};
             }
             if (!stopGetting) {
                 setEnvData(data);
@@ -68,6 +69,10 @@ function Control() {
     const handleClick2 = (index) => {
         const updatedEnvData = [...envData];
         updatedEnvData[index].threshold = 1 - updatedEnvData[index].threshold;
+        const s = async () => {
+            const a = await changeappliedThreshold(updatedEnvData[index].dvId, updatedEnvData[index].threshold);
+        };
+        s();
         setEnvData(updatedEnvData);
     };
 

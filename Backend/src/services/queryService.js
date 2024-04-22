@@ -113,7 +113,41 @@ const getCurrentUser = async () => {
     }
 }
 
+// lấy coi có kích hoạt tự động bật/tắt thiết bị 
+const getDeviceAppliedTh = async (id) => {
+    try {
+        const device = await db.Device.findOne({
+            where: { id },
+            raw: true
+        });
+        let a;
+        if (device.isAppliedThreshold === null || device.isAppliedThreshold === undefined) {
+            a = 0;
+        } else {
+            a = device.isAppliedThreshold;
+        }
+        
+        return a;
+    } catch (err) {
+        console.log(err);
+    }
+}
+// thay đổi việc kích hoạt tự động bật/tắt thiết bị 
+
+const saveDeviceAppliedTh = async ( DeviceId, value) => {
+    try {
+        await db.Device.update(
+            { isAppliedThreshold: value },
+            { where: { id: DeviceId } }
+          );
+        return 1
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = { 
     geDeviceById, getSensorById, getLastValueWithSensor, getLastSensorValue, getLastDeviceValue, 
-    checkThreshold, saveNewestSensorValue, saveNewestDeviceValue, getCurrentUser 
+    checkThreshold, saveNewestSensorValue, saveNewestDeviceValue, getCurrentUser,
+    getDeviceAppliedTh, saveDeviceAppliedTh
 };
