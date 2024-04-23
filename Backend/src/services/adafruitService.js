@@ -12,13 +12,17 @@ const saveNewestData = async () => {
     try {
         const den = await queryService.geDeviceById('den');
         const maybom = await queryService.geDeviceById('maybom');
+
         const sensorIds = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
+
         for (const sensorId of sensorIds) {
             const newestValue = await axios.get('/' + sensorId + '/data/last', { params: { 'x-aio-key': key } });
             const lastSavedValue = await queryService.getLastSensorValue(sensorId);
+
             if (!lastSavedValue || (lastSavedValue && new Date(lastSavedValue.timestamp) < new Date(newestValue.created_at))) {
                 const { isBelowLowerBound, isAboveUpperBound } = await queryService.checkThreshold(sensorId, newestValue.value);
                 await queryService.saveNewestSensorValue(new Date(newestValue.created_at), sensorId, newestValue.value, isBelowLowerBound, isAboveUpperBound);
+
                 if (isBelowLowerBound || isAboveUpperBound) {
                     if (sensorId === 'anhsang') {
                         if (den.isApplyThreshold) {
@@ -34,11 +38,14 @@ const saveNewestData = async () => {
                 }
             }
         }
+
         const deviceIds = ['den', 'maybom'];
         const currUser = await queryService.getCurrentUser();
+
         for (const deviceId of deviceIds) {
             const newestValue = await axios.get('/' + deviceId + '/data/last', { params: { 'x-aio-key': key } });
             const lastSavedValue = await queryService.getLastDeviceValue(deviceId);
+
             if (!lastSavedValue || (lastSavedValue && new Date(lastSavedValue.timestamp) < new Date(newestValue.created_at))) {
                 let isAppliedThreshold, isAppliedSchedule;
                 if (deviceId === 'den') {
@@ -48,6 +55,7 @@ const saveNewestData = async () => {
                     isAppliedThreshold = maybom.isAppliedThreshold;
                     isAppliedSchedule = maybom.isAppliedSchedule;
                 }
+                
                 await queryService.saveNewestDeviceValue(new Date(newestValue.created_at), deviceId, newestValue.value, isAppliedThreshold, isAppliedSchedule, currUser);
             }
         }

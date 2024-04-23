@@ -8,17 +8,13 @@ const serverErr = {
 }
 
 class settingController {
-    //[Get] /value/:gardenId
-    async getThresholdValueByGardenId(req, res) {
+    //[Get] /value/:sensorId
+    async getThresholdValueBySensorId(req, res) {
 
-        const gardenId = parseInt(req.params.gardenId);
-
-        if (!Number.isInteger(gardenId)) {
-            return res.status(400).json({ error: 'Invalid gardenId' });
-        }
+        const sensorId = req.params.sensorId;
 
         try {
-            const data = await webService.getThresholdValueByGardenId(gardenId);
+            const data = await webService.getThresholdValueBySensorId(sensorId);
             return res.status(200).json({
                 EM: data.EM,
                 EC: data.EC,
@@ -30,17 +26,14 @@ class settingController {
     }
 
 
-    //[post] /update/:sensorId/:sensorId/:gardenId . post a object {upperValue, lowerValue}
-    async updateThresholdOfGarden(req, res) {
+    //[post] /update/:sensorId . post a object {upperValue, lowerValue}
+    async updateThresholdOfSensor(req, res) {
 
-        const gardenId = parseInt(req.params.gardenId);
         const sensorId = req.params.sensorId;
         const existSensorId = ['nhietdo', 'doamdat', 'doamkk', 'anhsang']
+
         if (!existSensorId.includes(sensorId)) {
             return res.status(444).json({ message: `Can't update because sensorIdError` });
-        }
-        if (!Number.isInteger(gardenId)) {
-            return res.status(400).json({ error: 'Invalid gardenId' });
         }
 
         const newUpper = typeof req.body.newUpper !== 'undefined' ? req.body.newUpper : null;
@@ -51,7 +44,7 @@ class settingController {
         }
 
         try {
-            const response = await webService.updateThresholdOfGarden(gardenId, sensorId, newUpper, newLower);
+            const response = await webService.updateThresholdOfSensor(sensorId, newUpper, newLower);
             if (response.EC == 0) {
                 if (response.DT != 0) {
                     return res.status(200).json({ message: `Threshold updated successfully: ${response.EM}` });

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
-import { getThresholdByGardenId } from '../../../services/thesholdService';
+import { getThresholdBySensorId } from '../../../services/thesholdService';
+import { getAllSensor } from '../../../services/webService';
 import ModalEditThreshold from './ModalEditThreshold';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,6 +13,7 @@ import './SetGardenThreshold.scss';
 function SetGardenThreshold() {
     const [searchParams] = useSearchParams();
     const gardenId = searchParams.get('gardenId');
+
     // [1 : anhsang] [2: doamdat] [3: doamkk] [4: nhietdo]
     const sampleData = [
         {
@@ -58,30 +60,51 @@ function SetGardenThreshold() {
 
     const [thresholdData, setThresholdData] = useState([]);
     const [toggleEditValue, setToggleEditValue] = useState(false);
+
+
+    useEffect(()=>{
+        const fetchSensorInfoOfAGardan = async () => {
+            const response = await getAllSensor(gardenId);
+            setSensorList(response.DT)
+            console.log(response)
+            
+        }
+        fetchSensorInfoOfAGardan()
+    },[])
+
+    const sensor_id_list = ['anhsang', 'doamdat', 'doamkk', 'nhietdo']
+
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDataOfAthreshold = async () => {
             const typeSensor = {
                 anhsang: 0,
                 doamdat: 1,
                 doamkk: 2,
                 nhietdo: 3,
             };
-            const typeValue = ['lowerValue', 'upperValue'];
+            
+            let data = [...sampleData];
+
             try {
-                const response = await getThresholdByGardenId(gardenId);
-                let raws = response.DT;
-                let data = [...sampleData];
-                for (const raw of raws) {
-                    data[typeSensor[raw.SensorId]][typeValue[raw.isUpperBound]] = raw.value;
-                    data[typeSensor[raw.SensorId]]['unit'] = raw.unit;
+                for (const sensor_id of sensor_id_list) {
+                    
+                    const response = await getThresholdBySensorId(sensor_id);
+                    const thresholdOfASensor = response.DT;
+                    
+                    data[typeSensor[thresholdOfASensor.SensorId]]['upperValue'] = thresholdOfASensor.upperBound
+                    data[typeSensor[thresholdOfASensor.SensorId]]['lowerValue'] = thresholdOfASensor.lowerBound
+
                 }
 
-                setThresholdData(data);
+
+                setThresholdData(data)
             } catch (error) {
-                console.error('Error fetching garden:', error);
+                console.error('Error fetching threshold of a function: ', error);
             }
         };
-        fetchData();
+
+        fetchDataOfAthreshold();
     }, [toggleEditValue]);
 
     const navigate = useNavigate();
@@ -115,7 +138,6 @@ function SetGardenThreshold() {
                         <div className="align-self-center ms-3 me-3">
                             <ModalEditThreshold
                                 objectSetting={{
-                                    gardenId: gardenId,
                                     sensorId: data.id,
                                     currUpper: data.upperValue,
                                     currLower: data.lowerValue,

@@ -132,8 +132,8 @@ const getDeviceAppliedTh = async (id) => {
         console.log(err);
     }
 }
-// thay đổi việc kích hoạt tự động bật/tắt thiết bị 
 
+// thay đổi việc kích hoạt tự động bật/tắt thiết bị 
 const saveDeviceAppliedTh = async ( DeviceId, value) => {
     try {
         await db.Device.update(
