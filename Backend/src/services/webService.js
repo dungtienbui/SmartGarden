@@ -1,3 +1,4 @@
+import { where } from 'sequelize';
 import db from '../models';
 const Op = db.Sequelize.Op;
 import queryService from './queryService';
@@ -156,14 +157,13 @@ const getLastSensorValue = async (SensorId) => {
     }
 };
 
-// Threshold value
-// return: {message, code, data: thresholdData}
-const getThresholdValueByGardenId = async (GardenId) => {
+const getThresholdValueBySensorId = async (SensorId) => {
     try {
-        const thresholdValue = await db.Threshold.findAll({
-            attributes: { exclude: ['id'] }, 
-            where: { GardenId }, 
-            raw: true 
+        const thresholdValue = await db.Threshold.findOne({
+            attributes: { exclude: ['id'] },
+            where: { SensorId: SensorId },
+            raw: true,
+
         });
         if (thresholdValue) {
             return {
@@ -178,11 +178,13 @@ const getThresholdValueByGardenId = async (GardenId) => {
     }
 };
 
-// in: GardenId, SensorId, upperValue, lowerValue
+
+
+// in: SensorId, upperValue, lowerValue
 // update threshold value with SensorIdId
 // return: {message, code, data: rowAffected}
 // SensorId: nhietdo, doamdat, doamkk, anhsang
-const updateThresholdOfGarden = async (GardenId, SensorId, newUpper, newLower) => {
+const updateThresholdOfSensor = async (SensorId, newUpper, newLower) => {
     const existSensorId = ['nhietdo', 'doamdat', 'doamkk', 'anhsang']
     if (!existSensorId.includes(SensorId)){
         console.log('not find SensorIdId');
@@ -195,11 +197,12 @@ const updateThresholdOfGarden = async (GardenId, SensorId, newUpper, newLower) =
     try {
         let updatedUpper = null;
         let updatedLower = null;
+
         if (newUpper != null){
-            updatedUpper = await db.Threshold.update({ value: newUpper }, { where: { GardenId: GardenId, SensorId: SensorId, isUpperBound: true } });
+            updatedUpper = await db.Threshold.update({ upperBound: newUpper }, { where: { SensorId: SensorId}});
         }
         if (newLower != null){
-            updatedLower = await db.Threshold.update({ value: newLower }, { where: { GardenId: GardenId, SensorId: SensorId, isUpperBound: false } });
+            updatedLower = await db.Threshold.update({ lowerBound: newLower }, { where: { SensorId: SensorId}});
         }
 
         if (updatedUpper == null && updatedLower == null) {
@@ -264,7 +267,7 @@ const getLastOutThreshold = async (sensorId, deviceId) => {
 module.exports = { 
     getAllGarden, getLastValueWithSensor, getAllSensor, 
     getSensorInfo, getDataChart, getPageData, getLastSensorValue,
-    getThresholdValueByGardenId, updateThresholdOfGarden,  
+    getThresholdValueBySensorId, updateThresholdOfSensor,  
     getLastOutThreshold
 };
 

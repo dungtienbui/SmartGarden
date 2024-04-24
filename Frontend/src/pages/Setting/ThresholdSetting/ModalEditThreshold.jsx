@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { updateThresholdOfGarden } from '../../../services/thesholdService';
+import { updateThresholdOfSensor } from '../../../services/thesholdService'
 
 function ModalEditThreshold(prop) {
     const [show, setShow] = useState(false);
@@ -68,8 +68,7 @@ function ModalEditThreshold(prop) {
 
             if (newUpper != null || newLower != null) {
                 try {
-                    const response = await updateThresholdOfGarden(
-                        prop.objectSetting.gardenId,
+                    const response = await updateThresholdOfSensor(
                         prop.objectSetting.sensorId,
                         newUpper,
                         newLower,

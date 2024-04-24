@@ -4,30 +4,14 @@ import { webAxios } from '../utils/axios';
 // [get] /threshold/value/:gardenId
 // input: gardenId
 // return: null if gardenId invalid
-const getThresholdByGardenId = async (gardenId) => {
-    const isInteger = Number.isInteger(parseInt(gardenId));
-
-    if (!isInteger) {
-        console.error('Invalid gardenId');
-        return null;
-    }
-
-    return await webAxios.get(`/setting/threshold/value/${gardenId}`);
+const getThresholdBySensorId = async (sensorId) => {
+    return await webAxios.get(`/setting/threshold/value/${sensorId}`);
 };
-
-// update light intensive threshold of garden with 'gardenId'
-//[post] /update/:sensorId/:gardenId . post a object {newUpper, newLower}
-// input: gardenId, newUpper, newLower
+//[post] /update/:sensorId. post a object {newUpper, newLower}
+// input: sensorId, newUpper, newLower
 // return: null if gardenId invalid
-const updateThresholdOfGarden = async (gardenId, sensorId, newUpper, newLower) => {
-    const isInteger = Number.isInteger(parseInt(gardenId));
-
-    if (!isInteger) {
-        console.error('Invalid gardenId');
-        return null;
-    }
-
-    return await webAxios.post(`/setting/threshold/update/${sensorId}/${gardenId}`, { newUpper, newLower });
+const updateThresholdOfSensor = async (sensorId, newUpper, newLower) => {
+    return await webAxios.post(`/setting/threshold/update/${sensorId}`, { newUpper, newLower });
 };
 
-export { getThresholdByGardenId, updateThresholdOfGarden };
+export { getThresholdBySensorId, updateThresholdOfSensor };
