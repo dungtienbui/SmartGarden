@@ -61,19 +61,16 @@ function SetGardenThreshold() {
     const [thresholdData, setThresholdData] = useState([]);
     const [toggleEditValue, setToggleEditValue] = useState(false);
 
-
-    useEffect(()=>{
+    useEffect(() => {
         const fetchSensorInfoOfAGardan = async () => {
             const response = await getAllSensor(gardenId);
-            setSensorList(response.DT)
-            console.log(response)
-            
-        }
-        fetchSensorInfoOfAGardan()
-    },[])
+            setSensorList(response.DT);
+            console.log(response);
+        };
+        fetchSensorInfoOfAGardan();
+    }, []);
 
-    const sensor_id_list = ['anhsang', 'doamdat', 'doamkk', 'nhietdo']
-
+    const sensor_id_list = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
 
     useEffect(() => {
         const fetchDataOfAthreshold = async () => {
@@ -83,22 +80,16 @@ function SetGardenThreshold() {
                 doamkk: 2,
                 nhietdo: 3,
             };
-            
             let data = [...sampleData];
-
             try {
                 for (const sensor_id of sensor_id_list) {
-                    
                     const response = await getThresholdBySensorId(sensor_id);
                     const thresholdOfASensor = response.DT;
-                    
-                    data[typeSensor[thresholdOfASensor.SensorId]]['upperValue'] = thresholdOfASensor.upperBound
-                    data[typeSensor[thresholdOfASensor.SensorId]]['lowerValue'] = thresholdOfASensor.lowerBound
 
+                    data[typeSensor[thresholdOfASensor.SensorId]]['upperValue'] = thresholdOfASensor.upperBound;
+                    data[typeSensor[thresholdOfASensor.SensorId]]['lowerValue'] = thresholdOfASensor.lowerBound;
                 }
-
-
-                setThresholdData(data)
+                setThresholdData(data);
             } catch (error) {
                 console.error('Error fetching threshold of a function: ', error);
             }

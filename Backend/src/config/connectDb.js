@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 
-const sequelize = new Sequelize('SmartGarden', 'root', "", {
+const sequelize = new Sequelize('smartgarden', 'root', "123456", {
     host: 'localhost',
     dialect: 'mysql'
 })

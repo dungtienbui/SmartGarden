@@ -25,12 +25,12 @@ const saveNewestData = async () => {
 
                 if (isBelowLowerBound || isAboveUpperBound) {
                     if (sensorId === 'anhsang') {
-                        if (den.isApplyThreshold) {
+                        if (den.isAppliedThreshold) {
                             const postState = isBelowLowerBound ? 1 : 0;
                             await postDeviceCondition('den', postState);
                         }
                     } else if (sensorId === 'doamdat') {
-                        if (maybom.isApplyThreshold) {
+                        if (maybom.isAppliedThreshold) {
                             const postState = isBelowLowerBound ? 1 : 0;
                             await postDeviceCondition('maybom', postState);
                         }

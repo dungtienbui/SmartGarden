@@ -18,7 +18,6 @@ class controlController {
 
     async getDeviceCondition(req, res) {
         try {
-      
            const ddata = await adafruitService.getDeviceCondition(req.query.device);
             if (ddata) {
                 return res.status(200).json({
@@ -43,22 +42,18 @@ class controlController {
                 });
             }
         } catch (err) {
-
             return res.status(500).json(serverErr1);
-
         }
     }
     async getDeviceAppliedTh(req, res) {
         try {      
             let ddata = 0
             ddata = await queryService.getDeviceAppliedTh(req.query.device);
-            
             return res.status(200).json({
                 EM: 'Get success',
                 EC: 0,
                 DT: ddata
             });
-            
         } catch (err) {
             return res.status(500).json(serverErr);
         }
@@ -66,20 +61,14 @@ class controlController {
 
     async postDeviceAppliedTh(req, res) {
         try {
-            console.log(req.body.device, req.body.value)
             await queryService.saveDeviceAppliedTh(req.body.device,req.body.value );
-            
             return res.status(200).json({
                 EM: 'Post success',
                 EC: 0,
                 DT: 1
             });
-            
-            
         } catch (err) {
-
             return res.status(500).json(serverErr1);
-
         }
     }
 

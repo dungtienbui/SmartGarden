@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { getdvcondition, changedevice, changeappliedThreshold, getdvappliedThreshold } from '../../services/deviceService';
+import {
+    getdvcondition,
+    changedevice,
+    changeappliedThreshold,
+    getdvappliedThreshold,
+} from '../../services/deviceService';
 
 import { BsToggleOff, BsToggleOn } from 'react-icons/bs';
 
@@ -41,7 +46,7 @@ function Control() {
             for (let i = 0; i < dv.length; i++) {
                 const raw = await getdvcondition(gardenId, dv[i]);
                 const raw2 = await getdvappliedThreshold(gardenId, dv[i]);
-                data[i] = { ...data[i], time: raw.time, condition: raw.value, threshold: raw2};
+                data[i] = { ...data[i], time: raw.time, condition: raw.value, threshold: raw2 };
             }
             if (!stopGetting) {
                 setEnvData(data);
@@ -111,7 +116,8 @@ function Control() {
                                 </div>
                                 <div className="title line-bt1">
                                     <div className="s">
-                                        Tự động bật {data.title} khi dưới ngưỡng: {data.threshold === 1 ? 'bật' : 'tắt'}
+                                        Tự động bật/tắt {data.title} khi vượt ngưỡng:
+                                        {data.threshold === 1 ? ' bật' : ' tắt'}
                                     </div>
                                     <div key={index} className="o" onClick={() => handleClick2(index)}>
                                         {data.threshold === 1 ? (

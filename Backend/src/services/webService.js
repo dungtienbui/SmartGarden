@@ -178,8 +178,6 @@ const getThresholdValueBySensorId = async (SensorId) => {
     }
 };
 
-
-
 // in: SensorId, upperValue, lowerValue
 // update threshold value with SensorIdId
 // return: {message, code, data: rowAffected}
