@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
     getdvcondition,
     changedevice,
@@ -14,15 +14,18 @@ import pump from '../../assets/pump.png';
 import './Control.scss';
 
 function Control() {
-    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const gardenId = searchParams.get('gardenId');
+
+    const [appliedThreshold, setAppliedThreshold] = useState({ den: 0, maybom: 0 });
+    const [deviceState, setDeviceState] = useState({ den: 0, maybom: 0 });
+    const [skip, setSkip] = useState(false);
     const dvData = [
         {
             dvId: 'den',
             title: 'đèn',
-            condition: 0,
-            threshold: 0,
+            condition: deviceState.den,
+            threshold: appliedThreshold.den,
             icon: bulb,
             value: '0',
             total: '3',
@@ -30,64 +33,72 @@ function Control() {
         {
             dvId: 'maybom',
             title: 'máy bơm',
-            condition: 0,
-            threshold: 0,
+            condition: deviceState.maybom,
+            threshold: appliedThreshold.maybom,
             icon: pump,
             value: '0',
             total: '3',
         },
     ];
-    const [envData, setEnvData] = useState(dvData);
+
+    useEffect(() => {
+        const dv = ['den', 'maybom'];
+        const getIsAppliedThreshold = async () => {
+            let data = { ...appliedThreshold };
+            for (let i = 0; i < dv.length; i++) {
+                const raw = await getdvappliedThreshold(gardenId, dv[i]);
+                data[dv[i]] = raw;
+            }
+            setAppliedThreshold(data);
+        };
+        getIsAppliedThreshold();
+    }, [gardenId]);
+
     useEffect(() => {
         const dv = ['den', 'maybom'];
         let stopGetting = false;
         const getData = async () => {
-            let data = [...dvData];
+            let data = { ...deviceState };
             for (let i = 0; i < dv.length; i++) {
                 const raw = await getdvcondition(gardenId, dv[i]);
-                const raw2 = await getdvappliedThreshold(gardenId, dv[i]);
-                data[i] = { ...data[i], time: raw.time, condition: raw.value, threshold: raw2 };
+                data[dv[i]] = raw.state;
             }
-            if (!stopGetting) {
-                setEnvData(data);
+            if (!stopGetting && skip) {
+                setDeviceState(data);
             }
         };
         getData();
         const intervalId = setInterval(() => getData(), 2000);
         return () => {
             clearInterval(intervalId);
-            setEnvData(dvData);
+            setDeviceState({ den: 0, maybom: 0 });
             stopGetting = true;
         };
     }, [gardenId]);
 
-    const handleClick1 = (index) => {
-        const updatedEnvData = [...envData];
-        updatedEnvData[index].condition = 1 - updatedEnvData[index].condition;
-        const s = async () => {
-            const a = await changedevice(updatedEnvData[index].dvId, updatedEnvData[index].condition);
-        };
-        s();
-        setEnvData(updatedEnvData);
+    const handleClick1 = async (dvId) => {
+        const updatedCondition = { ...deviceState };
+        updatedCondition[dvId] = 1 - updatedCondition[dvId];
+        setSkip(true);
+        setDeviceState(updatedCondition);
+        setSkip(false);
+        await changedevice(dvId, updatedCondition[dvId]);
     };
 
-    const handleClick2 = (index) => {
-        const updatedEnvData = [...envData];
-        updatedEnvData[index].threshold = 1 - updatedEnvData[index].threshold;
-        const s = async () => {
-            const a = await changeappliedThreshold(updatedEnvData[index].dvId, updatedEnvData[index].threshold);
-        };
-        s();
-        setEnvData(updatedEnvData);
+    const handleClick2 = async (dvId) => {
+        const updatedThreshold = { ...appliedThreshold };
+        updatedThreshold[dvId] = 1 - updatedThreshold[dvId];
+        setAppliedThreshold(updatedThreshold);
+        await changeappliedThreshold(dvId, updatedThreshold[dvId]);
     };
 
     return (
         <div className="control-page h-100 px-3 position-relative">
             <h3 className="title fw-normal text-center py-3">Cài đặt lịch trình</h3>
             <div className="env-control px-3">
-                {envData.map((data, index) => (
+                {dvData.map((data, index) => (
                     <div key={index}>
-                        <div className="control-bulb-card d-flex my-2 justify-content-between rounded-4">
+                        <div className="control-bulb-card d-flex p-2 pe-0 my-3 justify-content-between rounded-4">
                             <div className="bulb p-2">
                                 <div className="icon p-2 rounded-4">
                                     <img className="default-layout" src={data.icon} alt={data.title} />
@@ -100,18 +111,19 @@ function Control() {
                                     </div>
                                 )}
                             </div>
-
                             <div className="data ps-3">
                                 <div className="title line-bt1">
                                     <div className="s">
                                         Trạng thái: {data.condition === 1 ? 'đang bật' : 'đang tắt'}
                                     </div>
-                                    <div key={index} className="o" onClick={() => handleClick1(index)}>
-                                        {data.condition === 1 ? (
-                                            <BsToggleOn className="toggle" color="green" />
-                                        ) : (
-                                            <BsToggleOff className="toggle" color="red" />
-                                        )}
+                                    <div className="form-check form-switch me-3">
+                                        <input
+                                            className="form-check-input fs-3"
+                                            type="checkbox"
+                                            role="switch"
+                                            checked={data.condition}
+                                            onChange={() => handleClick1(data.dvId)}
+                                        />
                                     </div>
                                 </div>
                                 <div className="title line-bt1">
@@ -119,12 +131,14 @@ function Control() {
                                         Tự động bật/tắt {data.title} khi vượt ngưỡng:
                                         {data.threshold === 1 ? ' bật' : ' tắt'}
                                     </div>
-                                    <div key={index} className="o" onClick={() => handleClick2(index)}>
-                                        {data.threshold === 1 ? (
-                                            <BsToggleOn className="toggle" color="green" />
-                                        ) : (
-                                            <BsToggleOff className="toggle" color="red" />
-                                        )}
+                                    <div className="form-check form-switch me-3">
+                                        <input
+                                            className="form-check-input fs-3"
+                                            type="checkbox"
+                                            role="switch"
+                                            checked={data.threshold}
+                                            onChange={() => handleClick2(data.dvId)}
+                                        />
                                     </div>
                                 </div>
                                 <div className="title">

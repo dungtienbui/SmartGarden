@@ -1,5 +1,6 @@
 import adafruitService from '../services/adafruitService';
 import queryService from '../services/queryService';
+import webService from '../services/webService';
 require('dotenv').config()
 
 const serverErr = {
@@ -18,12 +19,12 @@ class controlController {
 
     async getDeviceCondition(req, res) {
         try {
-           const ddata = await adafruitService.getDeviceCondition(req.query.device);
+           const ddata = await webService.getLastDeviceCondition(req.query.device);
             if (ddata) {
                 return res.status(200).json({
-                    EM: 'Get success',
-                    EC: 0,
-                    DT: ddata
+                    EM: ddata.EM,
+                    EC: ddata.EC,
+                    DT: ddata.DT
                 });
             }
         } catch (err) {

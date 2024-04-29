@@ -43,8 +43,8 @@ function DefaultLayout({ children }) {
                 <ModalLogout show={showModal} handleClose={handleClose} />
             </div>
             <div className="container content">
-                <Notification sensorId="anhsang" deviceId="den" />
-                <Notification sensorId="doamdat" deviceId="maybom" />
+                {/* <Notification sensorId="anhsang" deviceId="den" />
+                <Notification sensorId="doamdat" deviceId="maybom" /> */}
                 {children}
             </div>
         </div>

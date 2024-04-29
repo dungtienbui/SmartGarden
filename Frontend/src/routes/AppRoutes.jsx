@@ -7,7 +7,6 @@ import SensorData from '../pages/Data/SensorData/SensorData';
 import Control from '../pages/Control/Control';
 import Statistic from '../pages/Statistic/Statistic';
 import Setting from '../pages/Setting/Setting';
-// import ThresholdSetting from '../pages/Setting/ThresholdSetting/ThresholdSetting';
 import SetGardenThreshold from '../pages/Setting/ThresholdSetting/SetGardenThreshold';
 import Login from '../pages/LoginRegister/Login';
 import Register from '../pages/LoginRegister/Register';

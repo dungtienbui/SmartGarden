@@ -262,10 +262,31 @@ const getLastOutThreshold = async (sensorId, deviceId) => {
     }
 };
 
+const getLastDeviceCondition = async (DeviceId) => {
+    try {
+        const lastValue = await db.OperationLog.findOne({
+            attributes: { exclude: ['id'] },
+            where: { DeviceId },
+            order: [['timestamp', 'DESC']],
+            raw: true,
+        });
+        if (lastValue) {
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: lastValue
+            };
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr;
+    }
+};
+
 module.exports = { 
     getAllGarden, getLastValueWithSensor, getAllSensor, 
     getSensorInfo, getDataChart, getPageData, getLastSensorValue,
     getThresholdValueBySensorId, updateThresholdOfSensor,  
-    getLastOutThreshold
+    getLastOutThreshold, getLastDeviceCondition
 };
 

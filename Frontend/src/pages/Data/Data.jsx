@@ -77,15 +77,15 @@ function Data() {
                             <div className="icon p-2 me-2 rounded-4">{data.icon}</div>
                             <div className="data">
                                 <h4 className="title mt-2 mb-4">{data.title}</h4>
-                                <p className="time d-inline fs-5">{data.time}</p>
-                                <p className="value d-inline ms-5 fs-2 text-danger">
+                                <p className="time d-inline">{data.time}</p>
+                                <p className="value d-inline ms-5 fs-3 text-danger">
                                     {data.value} {data.unit}
                                 </p>
                             </div>
                         </div>
                         <div className="align-self-center me-5">
                             <button
-                                className="btn btn-outline-secondary fs-5"
+                                className="btn btn-outline-secondary"
                                 onClick={() => navigate(`/data/${data.sensorId}?gardenId=${gardenId}`)}
                             >
                                 Chi tiết
