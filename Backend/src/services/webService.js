@@ -105,37 +105,6 @@ const getDataChart = async (SensorId, limit) => {
     }
 };
 
-const getPageSensorData = async (SensorId, page, limit, start, end) => {
-    try {
-        let whereCondition;
-        if (start && end) whereCondition = { SensorId, timestamp: { [Op.between]: [start, end] }}
-        else if (start) whereCondition = { SensorId, timestamp: { [Op.gte]: start }}
-        else if (end) whereCondition = { SensorId, timestamp: { [Op.lt]: end }}
-        else whereCondition = { SensorId }
-    
-        const offset = (page - 1)*limit;
-        let { count, rows } = await db.MeasuredValue.findAndCountAll({
-            attributes: { exclude: ['id'] },
-            order: [['timestamp', 'DESC']],
-            where: whereCondition,
-            offset, limit, 
-            raw: true
-        });
-        if (rows) {
-            const data = rows.map((row) => ({time: row.timestamp.toLocaleString(), value: row.value }));
-            const pageData = { numRow: count, numPage: Math.ceil(count/limit), data };
-            return {
-                EM: 'Get succeed',
-                EC: 0,
-                DT: pageData
-            };
-        }
-    } catch (err) {
-        console.log(err);
-        return serviceErr;
-    }
-};
-
 const getLastSensorValue = async (SensorId) => {
     try {
         const lastValue = await db.MeasuredValue.findOne({
@@ -283,7 +252,39 @@ const getLastDeviceCondition = async (DeviceId) => {
     }
 };
 
-const getPageOperationData = async (DeviceId, page, limit, start, end, operator, isNewest, state) => {
+const getPageSensorData = async (SensorId, page, limit, start, end) => {
+    try {
+        let timeFilter = {};
+        if (start && end) timeFilter = { timestamp: { [Op.between]: [start, end] }};
+        else if (start) timeFilter = { timestamp: { [Op.gte]: start }};
+        else if (end) timeFilter = { timestamp: { [Op.lt]: end }};
+        
+        const whereCondition = { SensorId, ...timeFilter };
+    
+        const offset = (page - 1)*limit;
+        let { count, rows } = await db.MeasuredValue.findAndCountAll({
+            attributes: { exclude: ['id'] },
+            order: [['timestamp', 'DESC']],
+            where: whereCondition,
+            offset, limit, 
+            raw: true
+        });
+        if (rows) {
+            const data = rows.map((row) => ({time: row.timestamp.toLocaleString(), value: row.value }));
+            const pageData = { numRow: count, numPage: Math.ceil(count/limit), data };
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: pageData
+            };
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr;
+    }
+};
+
+const getPageOperationData = async (DeviceId, page, limit, start, end, operator, sortNew, state) => {
     try {
         let filter;
         if (operator == '-1') filter = {};
@@ -291,24 +292,62 @@ const getPageOperationData = async (DeviceId, page, limit, start, end, operator,
         else if (operator == '1') filter = { isAppliedThreshold : 1 };
         else filter = { operatedBy : operator, isAppliedSchedule : 0, isAppliedThreshold : 0 };
 
-        if (state !== '-1') filter.state = +state;
+        if (state != '-1') filter.state = +state;
 
-        let whereCondition;
-        if (start && end) whereCondition = { DeviceId, timestamp: { [Op.between]: [start, end] }, ...filter };
-        else if (start) whereCondition = { DeviceId, timestamp: { [Op.gte]: start }, ...filter };
-        else if (end) whereCondition = { DeviceId, timestamp: { [Op.lt]: end }, ...filter };
-        else whereCondition = { DeviceId, ...filter };
+        let timeFilter = {};
+        if (start && end) timeFilter = { timestamp: { [Op.between]: [start, end] }};
+        else if (start) timeFilter = { timestamp: { [Op.gte]: start }};
+        else if (end) timeFilter = { timestamp: { [Op.lt]: end }};
         
+        const whereCondition = { DeviceId, ...timeFilter, ...filter };
+
         const offset = (page - 1)*limit;
         const { count, rows } = await db.OperationLog.findAndCountAll({
             attributes: { exclude: ['id'] },
-            order: [['timestamp', isNewest === 'true' ? 'DESC' : 'ASC']],
+            order: [['timestamp', sortNew == 'true' ? 'DESC' : 'ASC']],
             where: whereCondition,
             offset, limit, 
             raw: true
         });
         if (rows) {
-            const data = rows.map((row) => ({ ...row, time: row.timestamp.toLocaleString() }));
+            const data = rows.map((row) => ({ ...row, timestamp: row.timestamp.toLocaleString() }));
+            const pageData = { numRow: count, numPage: Math.ceil(count/limit), data };
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: pageData
+            };
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr;
+    }
+};
+
+const getPageOutThresholdData = async (SensorId, page, limit, start, end, sortNew, outBound) => {
+    try {
+        let filter;
+        if (outBound == '0') filter = { isBelowLowerBound : 1 };
+        else if (outBound == '1') filter = { isAboveUpperBound : 1 };
+        else filter = {[Op.or]: [{ isBelowLowerBound : 1 }, { isAboveUpperBound : 1 }] }
+
+        let timeFilter = {};
+        if (start && end) timeFilter = { timestamp: { [Op.between]: [start, end] }};
+        else if (start) timeFilter = { timestamp: { [Op.gte]: start }};
+        else if (end) timeFilter = { timestamp: { [Op.lt]: end }};
+        
+        const whereCondition = { SensorId, ...timeFilter, ...filter };
+        
+        const offset = (page - 1)*limit;
+        const { count, rows } = await db.MeasuredValue.findAndCountAll({
+            attributes: { exclude: ['id'] },
+            order: [['timestamp', sortNew === 'true' ? 'DESC' : 'ASC']],
+            where: whereCondition,
+            offset, limit, 
+            raw: true
+        });
+        if (rows) {
+            const data = rows.map((row) => ({ ...row, timestamp: row.timestamp.toLocaleString() }));
             const pageData = { numRow: count, numPage: Math.ceil(count/limit), data };
             return {
                 EM: 'Get succeed',
@@ -324,8 +363,9 @@ const getPageOperationData = async (DeviceId, page, limit, start, end, operator,
 
 module.exports = { 
     getAllGarden, getLastValueWithSensor, getAllSensor, 
-    getSensorInfo, getDataChart, getPageSensorData, getLastSensorValue,
+    getSensorInfo, getDataChart, getLastSensorValue,
     getThresholdValueBySensorId, updateThresholdOfSensor,  
-    getLastOutThreshold, getLastDeviceCondition, getPageOperationData
+    getLastOutThreshold, getLastDeviceCondition, 
+    getPageSensorData, getPageOperationData, getPageOutThresholdData
 };
 

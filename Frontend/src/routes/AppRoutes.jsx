@@ -53,11 +53,6 @@ const privateRoutes = [
         component: () => <WrapPrivate children={<GardenNav children={<SetGardenThreshold />} />} />,
         layout: DefaultLayout,
     },
-    {
-        path: 'setting/account-settings',
-        component: () => <WrapPrivate children={<ThresholdSetting />} />,
-        layout: DefaultLayout,
-    },
 ];
 
 const publicRoutes = [

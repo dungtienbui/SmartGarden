@@ -146,6 +146,35 @@ class sensorController {
             return res.status(500).json(serverErr);
         }
     }
+
+    async getPageOutThresholdData(req, res) {
+        try {
+            const sensorId = req.params.sensorId;
+            const { page, limit, start, end, sortNew, outBound } = req.query;
+            let from = start !== '' ? new Date(new Date(start).toLocaleString("en-US", {timeZone: "GMT"})) : null;
+            let to = end !== '' ? new Date(new Date(end).toLocaleString("en-US", {timeZone: "GMT"})) : null;
+            if (from && to) {
+                if (start >= end) { 
+                    return res.json({
+                        EM: "Ngày bắt đầu phải trước ngày kết thúc !",
+                        EC: -1,
+                        DT: [] 
+                    });
+                }
+            }
+            const pageData = await webService.getPageOutThresholdData(sensorId, +page, +limit, from, to, sortNew, outBound);
+            if (pageData) {
+                return res.status(200).json({
+                    EM: pageData.EM,
+                    EC: pageData.EC,
+                    DT: pageData.DT 
+                });
+            }
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    }
+
 };
 
 export default new sensorController();

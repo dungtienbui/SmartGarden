@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import { getPageOperationData } from '../../../../services/webService';
-import { getUserNames } from '../../../../services/userService';
+import { getPageOutThresholdData, getSensorInfo } from '../../../../services/webService';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -12,11 +11,11 @@ import {
     faCaretDown,
     faFilter,
 } from '@fortawesome/free-solid-svg-icons';
-import './OperationTable.scss';
+import './OutThresholdTable.scss';
 
-function OperationTable({ gardenId, deviceId, color }) {
-    const [userNames, setUserNames] = useState([]);
-    const defaultFilter = { start: '', end: '', operator: '-1', sortNew: true, state: -1 };
+function OutThresholdTable({ gardenId, sensorId, color }) {
+    const [unit, setUnit] = useState('');
+    const defaultFilter = { start: '', end: '', sortNew: true, outBound: -1 };
     const [dateFilter, setDateFilter] = useState({ start: '', end: '' });
     const [submitFilter, setSubmitFilter] = useState(defaultFilter);
     const [filtered, setFiltered] = useState(false);
@@ -33,14 +32,9 @@ function OperationTable({ gardenId, deviceId, color }) {
         setSubmitFilter(newSubmit);
         getData(currPage, { ...newSubmit });
     };
-    const handleFilterState = () => {
-        const newState = submitFilter.state === -1 ? 1 : submitFilter.state - 1;
-        const newSubmit = { ...submitFilter, state: newState };
-        setSubmitFilter(newSubmit);
-        getData(currPage, { ...newSubmit });
-    };
-    const handleFilterOperator = (operator) => {
-        const newSubmit = { ...submitFilter, operator };
+    const handleFilterOutBound = () => {
+        const newOutBound = submitFilter.outBound === -1 ? 1 : submitFilter.outBound - 1;
+        const newSubmit = { ...submitFilter, outBound: newOutBound };
         setSubmitFilter(newSubmit);
         getData(currPage, { ...newSubmit });
     };
@@ -73,7 +67,7 @@ function OperationTable({ gardenId, deviceId, color }) {
     };
 
     const getData = async (page, filterValue) => {
-        let res = await getPageOperationData(gardenId, deviceId, page, 11, filterValue);
+        const res = await getPageOutThresholdData(gardenId, sensorId, page, 11, filterValue);
         if (res) {
             if (res.EC === 0) {
                 if (page > res.DT.numPage) {
@@ -103,37 +97,17 @@ function OperationTable({ gardenId, deviceId, color }) {
     };
 
     useEffect(() => {
-        const getUsers = async () => {
-            const raw = await getUserNames(deviceId);
-            if (raw) setUserNames(raw.DT);
+        const getUnit = async () => {
+            const raw = await getSensorInfo(sensorId);
+            if (raw.EC === 0) setUnit(raw.DT.unit);
         };
-        getUsers();
+        getUnit();
         getData(1, { ...defaultFilter });
     }, [gardenId]);
 
     return (
-        <div className="operation-table row g-0 gap-2">
-            <div className="col-4 filter d-flex flex-column gap-2 px-5 mt-4">
-                <div className="row align-items-center mb-4 pe-1">
-                    <label htmlFor="select" className="col-6 p-0">
-                        Điều khiển bởi
-                    </label>
-                    <select
-                        id="select"
-                        className="form-select col"
-                        value={submitFilter.operator}
-                        onChange={(e) => handleFilterOperator(e.target.value)}
-                    >
-                        <option value="-1"></option>
-                        <option value="0">lịch trình</option>
-                        <option value="1">tự động</option>
-                        {userNames.map((username, index) => (
-                            <option value={username} key={index}>
-                                {username}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+        <div className="out-threshold-table row g-0 gap-2">
+            <div className="col-4 filter d-flex flex-column gap-2 px-5 mt-5">
                 <div className="row align-items-center pe-1">
                     <label htmlFor="start" className="col-4 p-0">
                         Từ
@@ -184,17 +158,17 @@ function OperationTable({ gardenId, deviceId, color }) {
                                         icon={submitFilter.sortNew ? faCaretDown : faCaretUp}
                                     />
                                 </td>
-                                <td className="state py-2" onClick={handleFilterState}>
-                                    Hoạt động &nbsp;
-                                    {submitFilter.state === -1 ? (
+                                <td className="py-2">Giá trị</td>
+                                <td className="state py-2" onClick={handleFilterOutBound}>
+                                    Vượt ngưỡng &nbsp;
+                                    {submitFilter.outBound === -1 ? (
                                         <FontAwesomeIcon color={color} className="fa-xs ms-1 pe-2" icon={faFilter} />
                                     ) : (
                                         <p className="d-inline" style={{ color: color }}>
-                                            {submitFilter.state === 0 ? 'Tắt' : 'Bật'}
+                                            {submitFilter.outBound === 0 ? 'Dưới' : 'Trên'}
                                         </p>
                                     )}
                                 </td>
-                                <td className="py-2">Điều khiển bởi</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -212,14 +186,10 @@ function OperationTable({ gardenId, deviceId, color }) {
                                     {pageData.map((data, index) => (
                                         <tr key={index} className="data-row fs-5">
                                             <td>{data.timestamp}</td>
-                                            <td>{data.state === 0 ? 'Tắt' : 'Bật'}</td>
-                                            <td>
-                                                {data.isAppliedSchedule === 1
-                                                    ? 'lịch trình'
-                                                    : data.isAppliedThreshold === 1
-                                                    ? 'tự động'
-                                                    : data.operatedBy}
+                                            <td className="d-flex p-0 m-0">
+                                                <p className="m-0 text-end">{data.value}</p> &nbsp;{unit}
                                             </td>
+                                            <td>{data.isBelowLowerBound === 1 ? 'Dưới' : 'Trên'}</td>
                                         </tr>
                                     ))}
                                 </>
@@ -256,4 +226,4 @@ function OperationTable({ gardenId, deviceId, color }) {
     );
 }
 
-export default OperationTable;
+export default OutThresholdTable;

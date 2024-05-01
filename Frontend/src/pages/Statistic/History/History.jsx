@@ -1,5 +1,6 @@
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import OperationTable from './OperationTable/OperationTable';
+import OutThresholdTable from './OutThresholdTable/OutThresholdTable';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faLightbulb, faDroplet, faLeaf, faTemperatureHigh } from '@fortawesome/free-solid-svg-icons';
@@ -11,14 +12,14 @@ function History() {
     const navigate = useNavigate();
     const params = useParams();
     const id = params.id;
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const gardenId = searchParams.get('gardenId');
 
     const data = {
-        anhsang: { title: 'Cường độ ánh sáng', icon: <FontAwesomeIcon color="#FFF732" icon={faLightbulb} /> },
-        doamdat: { title: 'Độ ẩm đất', icon: <FontAwesomeIcon color="#44C7FF" icon={faDroplet} /> },
-        doamkk: { title: 'Độ ẩm không khí', icon: <FontAwesomeIcon color="#1D9E67" icon={faLeaf} /> },
-        nhietdo: { title: 'Nhiệt độ', icon: <FontAwesomeIcon color="#F25550" icon={faTemperatureHigh} /> },
+        anhsang: { title: 'Cường độ ánh sáng', icon: faLightbulb, color: '#FCBB30' },
+        doamdat: { title: 'Độ ẩm đất', icon: faDroplet, color: '#44C7FF' },
+        doamkk: { title: 'Độ ẩm không khí', icon: faLeaf, color: '#1D9E67' },
+        nhietdo: { title: 'Nhiệt độ', icon: faTemperatureHigh, color: '#F25550' },
         den: { title: 'Đèn', icon: bulb, color: '#FCA833' },
         maybom: { title: 'Máy bơm', icon: pump, color: '#44C7FF' },
     };
@@ -48,10 +49,13 @@ function History() {
                     </>
                 ) : (
                     <>
-                        <div className="col-4 position-absolute bottom-0 mb-5">
-                            <div className="icon p-2 rounded-4 m-auto">{data[id].icon}</div>
+                        <div className="col-4 position-absolute bottom-0 mb-5 pe-3">
+                            <div className="icon p-2 rounded-4 m-auto">
+                                <FontAwesomeIcon color={data[id].color} icon={data[id].icon} />
+                            </div>
                             <h4 className="title mt-2 text-center">{data[id].title}</h4>
                         </div>
+                        <OutThresholdTable gardenId={gardenId} sensorId={id} color={data[id].color} />
                     </>
                 )}
             </div>

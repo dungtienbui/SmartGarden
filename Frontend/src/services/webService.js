@@ -47,4 +47,21 @@ const getPageOperationData = async (gardenId, deviceId, page, limit, filterValue
     return;
 };
 
-export { getAllGarden, getAllSensor, getSensorInfo, getNewestData, getPageSensorData, getPageOperationData };
+const getPageOutThresholdData = async (gardenId, sensorId, page, limit, filterValue) => {
+    if (gardenId == 1) {
+        return await webAxios.get(`sensor/data/page/outThreshold/${sensorId}`, {
+            params: { page, limit, ...filterValue },
+        });
+    }
+    return;
+};
+
+export {
+    getAllGarden,
+    getAllSensor,
+    getSensorInfo,
+    getNewestData,
+    getPageSensorData,
+    getPageOperationData,
+    getPageOutThresholdData,
+};

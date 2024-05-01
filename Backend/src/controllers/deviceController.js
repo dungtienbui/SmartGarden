@@ -76,7 +76,7 @@ class deviceController {
     async getPageOperationData(req, res) {
         try {
             const deviceId = req.params.deviceId;
-            const { page, limit, start, end, operator, isNewest, state } = req.query;
+            const { page, limit, start, end, operator, sortNew, state } = req.query;
             let from = start !== '' ? new Date(new Date(start).toLocaleString("en-US", {timeZone: "GMT"})) : null;
             let to = end !== '' ? new Date(new Date(end).toLocaleString("en-US", {timeZone: "GMT"})) : null;
             if (from && to) {
@@ -88,7 +88,7 @@ class deviceController {
                     });
                 }
             }
-            const pageData = await webService.getPageOperationData(deviceId, +page, +limit, from, to, operator, isNewest, state);
+            const pageData = await webService.getPageOperationData(deviceId, +page, +limit, from, to, operator, sortNew, state);
             if (pageData) {
                 return res.status(200).json({
                     EM: pageData.EM,

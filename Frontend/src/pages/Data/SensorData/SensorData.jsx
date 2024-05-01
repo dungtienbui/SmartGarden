@@ -31,7 +31,7 @@ function SensorData() {
     };
 
     const [unit, setUnit] = useState('');
-    const [lastValue, setLastValue] = useState({ time: 'Loading...', value: '' });
+    const [lastValue, setLastValue] = useState({ time: '', value: '' });
     useEffect(() => {
         const getUnit = async () => {
             const raw = await getSensorInfo(sensorId);

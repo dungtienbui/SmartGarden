@@ -54,6 +54,7 @@ function HistoryTable({ gardenId, sensorId }) {
         getUnit();
         getData(currPage, filterValue.start, filterValue.end);
     }, []);
+
     const getData = async (page, from, to) => {
         let res = await getPageSensorData(gardenId, sensorId, page, 10, from, to);
         if (res) {
@@ -74,6 +75,10 @@ function HistoryTable({ gardenId, sensorId }) {
             } else {
                 alert(res.EM);
             }
+        } else {
+            setPageCount(0);
+            setPageData([]);
+            setCurrPage(1);
         }
     };
 
@@ -109,7 +114,7 @@ function HistoryTable({ gardenId, sensorId }) {
             </div>
             <div className="table border border-secondary rounded mb-2 p-2">
                 {pageData.length === 0 ? (
-                    <p className="text-center fs-5">{pageCount === -1 ? 'Loading...' : 'No data'}</p>
+                    <p className="text-center fs-5 mb-1">{pageCount === -1 ? 'Loading...' : 'No data'}</p>
                 ) : (
                     pageData.map((data, index) => (
                         <div key={index} className="fs-5 d-flex ps-4 pe-3">

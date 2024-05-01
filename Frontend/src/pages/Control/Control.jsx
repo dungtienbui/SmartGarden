@@ -96,7 +96,7 @@ function Control() {
 
     return (
         <div className="control-page h-100 px-4 position-relative">
-            <h3 className="title text-center py-3">Cài đặt lịch trình</h3>
+            <h3 className="title text-center py-3">Điều khiển thiết bị</h3>
             <div className="env-control px-3">
                 {dvData.map((data, index) => (
                     <div key={index}>

@@ -1,0 +1,44 @@
+.out-threshold-table {
+    .filter {
+        > * {
+            font-size: 1.1rem;
+        }
+        input,
+        select {
+            cursor: pointer;
+            font-size: 1.1rem;
+            background-color: var(--input-bg);
+        }
+    }
+    table {
+        width: 100%;
+        thead {
+            td {
+                font-size: 1.2rem;
+            }
+            .time,
+            .state {
+                cursor: pointer;
+                transition: 0.2s;
+                &:hover {
+                    backdrop-filter: brightness(0.95);
+                }
+            }
+        }
+        .data-row {
+            color: #555;
+            transition: 0.2s;
+            &:hover {
+                background-color: #eee;
+            }
+            p {
+                width: 80px;
+            }
+        }
+    }
+    .pagination {
+        button {
+            height: max-content;
+        }
+    }
+}
