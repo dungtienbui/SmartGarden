@@ -61,14 +61,14 @@ function SetGardenThreshold() {
     const [thresholdData, setThresholdData] = useState([]);
     const [toggleEditValue, setToggleEditValue] = useState(false);
 
-    useEffect(() => {
-        const fetchSensorInfoOfAGardan = async () => {
-            const response = await getAllSensor(gardenId);
-            setSensorList(response.DT);
-            console.log(response);
-        };
-        fetchSensorInfoOfAGardan();
-    }, []);
+    // useEffect(() => {
+    //     const fetchSensorInfoOfAGardan = async () => {
+    //         const response = await getAllSensor(gardenId);
+    //         setSensorList(response.DT);
+    //         console.log(response);
+    //     };
+    //     fetchSensorInfoOfAGardan();
+    // }, []);
 
     const sensor_id_list = ['anhsang', 'doamdat', 'doamkk', 'nhietdo'];
 
