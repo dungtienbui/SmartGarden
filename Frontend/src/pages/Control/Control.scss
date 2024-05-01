@@ -1,18 +1,18 @@
 .control-page {
     > .title {
+        color: #444;
         border-bottom: 2px solid #999;
     }
     .env-control {
         height: 77%;
         .control-bulb-card {
-            border: 1px solid black;
+            border: 1px solid #bbb;
             .bulb {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 20px;
-
+                gap: 15px;
                 .icon {
                     .default-layout {
                         height: 63px;
@@ -24,7 +24,6 @@
                     background-color: #ddd;
                     font-size: 5rem;
                     width: 8rem;
-
                     justify-content: center;
                     align-items: center;
                     display: flex;
@@ -56,9 +55,8 @@
                     height: 33%;
                     .s {
                         height: fit-content;
-                        color: #00000099;
-                        font-weight: 500;
-                        font-size: 1.7rem;
+                        color: #444;
+                        font-size: 1.6rem;
                     }
                     .form-check-input {
                         cursor: pointer;
@@ -68,7 +66,6 @@
                         height: 3rem;
                         background-color: #ddd;
                         font-size: 20px;
-                        font-weight: 500;
                         &:hover {
                             background-color: #ccc;
                             cursor: pointer;
@@ -76,13 +73,10 @@
                     }
                 }
             }
-            // &:hover {
-            //     background-color: #eee;
-            // }
         }
     }
 }
 
 .line-bt1 {
-    border-bottom: 1px solid #2b2b2b;
+    border-bottom: 1px solid #ccc;
 }

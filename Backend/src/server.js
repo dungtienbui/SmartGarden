@@ -15,7 +15,7 @@ app.use(cors());
 
 connectDb();
 
-updateData();
+// updateData();
 
 routes(app);
 

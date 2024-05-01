@@ -15,7 +15,7 @@ const serverErr1 = {
     DT: ''
 }
 
-class controlController {
+class deviceController {
 
     async getDeviceCondition(req, res) {
         try {
@@ -62,7 +62,7 @@ class controlController {
 
     async postDeviceAppliedTh(req, res) {
         try {
-            await queryService.saveDeviceAppliedTh(req.body.device,req.body.value );
+            await queryService.saveDeviceAppliedTh(req.body.device, req.body.value);
             return res.status(200).json({
                 EM: 'Post success',
                 EC: 0,
@@ -73,6 +73,34 @@ class controlController {
         }
     }
 
+    async getPageOperationData(req, res) {
+        try {
+            const deviceId = req.params.deviceId;
+            const { page, limit, start, end, operator, isNewest, state } = req.query;
+            let from = start !== '' ? new Date(new Date(start).toLocaleString("en-US", {timeZone: "GMT"})) : null;
+            let to = end !== '' ? new Date(new Date(end).toLocaleString("en-US", {timeZone: "GMT"})) : null;
+            if (from && to) {
+                if (start >= end) {
+                    return res.json({
+                        EM: "Ngày bắt đầu phải trước ngày kết thúc !",
+                        EC: -1,
+                        DT: [] 
+                    });
+                }
+            }
+            const pageData = await webService.getPageOperationData(deviceId, +page, +limit, from, to, operator, isNewest, state);
+            if (pageData) {
+                return res.status(200).json({
+                    EM: pageData.EM,
+                    EC: pageData.EC,
+                    DT: pageData.DT 
+                });
+            }
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    }
+
 };
 
-export default new controlController();
+export default new deviceController();

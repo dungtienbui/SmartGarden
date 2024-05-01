@@ -1,6 +1,6 @@
 .set-garden-threshold-page {
     > .title {
-        font-weight: 500;
+        color: #444;
         border-bottom: 2px solid #999;
     }
     .env-data {
@@ -9,15 +9,18 @@
         .data-card {
             .icon {
                 background-color: #ddd;
-                font-size: 5rem;
-                width: 10rem;
+                font-size: 4rem;
+                width: 8.5rem;
                 text-align: center;
             }
             .data {
                 .title {
-                    color: #666;
-                    font-weight: 500;
-                    font-size: 1.7rem;
+                    font-weight: 400;
+                    font-size: 1.6rem;
+                }
+                .upper,
+                .lower {
+                    width: 180px;
                 }
             }
             &:hover {

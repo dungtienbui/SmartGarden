@@ -8,4 +8,8 @@ const logout = async () => {
     return await webAxios.put('/user/logout');
 };
 
-export { login, logout };
+const getUserNames = async () => {
+    return await webAxios.get('/user/username');
+};
+
+export { login, logout, getUserNames };

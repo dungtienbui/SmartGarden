@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams, NavLink } from 'react-router-dom';
 import LiveChart from '../../../components/LiveChart';
-import HistoryTable from '../../../components/HistoryTable/HistoryTable';
+import HistoryTable from './HistoryTable/HistoryTable';
 import { getSensorInfo } from '../../../services/webService';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

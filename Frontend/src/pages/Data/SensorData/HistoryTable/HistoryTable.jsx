@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import { getSensorInfo, getPageData } from '../../services/webService';
+import { getSensorInfo, getPageSensorData } from '../../../../services/webService';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
@@ -55,7 +55,7 @@ function HistoryTable({ gardenId, sensorId }) {
         getData(currPage, filterValue.start, filterValue.end);
     }, []);
     const getData = async (page, from, to) => {
-        let res = await getPageData(gardenId, sensorId, page, 10, from, to);
+        let res = await getPageSensorData(gardenId, sensorId, page, 10, from, to);
         if (res) {
             if (res.EC === 0) {
                 if (page > res.DT.numPage) {
@@ -107,7 +107,7 @@ function HistoryTable({ gardenId, sensorId }) {
                     Hủy
                 </button>
             </div>
-            <div className="table border border-dark rounded mb-2 p-2">
+            <div className="table border border-secondary rounded mb-2 p-2">
                 {pageData.length === 0 ? (
                     <p className="text-center fs-5">{pageCount === -1 ? 'Loading...' : 'No data'}</p>
                 ) : (

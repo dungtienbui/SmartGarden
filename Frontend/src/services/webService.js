@@ -22,20 +22,29 @@ const getNewestData = async (gardenId) => {
         }
     } else {
         retData = [
-            { time: '10:30:30 AM', value: '30', unit: 'lux' },
-            { time: '10:30:30 AM', value: '30', unit: '%' },
-            { time: '10:30:30 AM', value: '30', unit: '%' },
-            { time: '10:30:30 AM', value: '30', unit: '°C' },
+            { time: '00:00:00 AM', value: '0', unit: 'lux' },
+            { time: '00:00:00 AM', value: '0', unit: '%' },
+            { time: '00:00:00 AM', value: '0', unit: '%' },
+            { time: '00:00:00 AM', value: '0', unit: '°C' },
         ];
     }
     return retData;
 };
 
-const getPageData = async (gardenId, sensorId, page, limit, from, to) => {
+const getPageSensorData = async (gardenId, sensorId, page, limit, from, to) => {
     if (gardenId == 1) {
         return await webAxios.get(`/sensor/data/page/${sensorId}`, { params: { page, limit, from, to } });
     }
     return;
 };
 
-export { getAllGarden, getAllSensor, getSensorInfo, getNewestData, getPageData };
+const getPageOperationData = async (gardenId, deviceId, page, limit, filterValue) => {
+    if (gardenId == 1) {
+        return await webAxios.get(`/device/data/page/${deviceId}`, {
+            params: { page, limit, ...filterValue },
+        });
+    }
+    return;
+};
+
+export { getAllGarden, getAllSensor, getSensorInfo, getNewestData, getPageSensorData, getPageOperationData };

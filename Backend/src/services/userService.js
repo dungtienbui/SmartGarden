@@ -52,7 +52,28 @@ const logout = async () => {
         console.log(err);
         return serviceErr
     }
-}
+};
 
+const getUserNames = async () => {
+    try {
+        let usernames = await User.findAll({attributes: ['username'], raw: true});
+        usernames = usernames.map((username) => username.username);
+        if (usernames){
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: usernames
+            };
+        }
+        return {
+            EM: 'Get failed',
+            EC: -1,
+            DT: []
+        }
+    } catch (err){
+        console.log(err);
+        return serviceErr
+    }
+};
 
-module.exports = { login, logout };
+module.exports = { login, logout, getUserNames };

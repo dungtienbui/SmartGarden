@@ -105,7 +105,7 @@ const getDataChart = async (SensorId, limit) => {
     }
 };
 
-const getPageData = async (SensorId, page, limit, start, end) => {
+const getPageSensorData = async (SensorId, page, limit, start, end) => {
     try {
         let whereCondition;
         if (start && end) whereCondition = { SensorId, timestamp: { [Op.between]: [start, end] }}
@@ -238,7 +238,7 @@ const updateThresholdOfSensor = async (SensorId, newUpper, newLower) => {
 const getLastOutThreshold = async (sensorId, deviceId) => {
     try {
         const deviceData = await queryService.geDeviceById(deviceId);
-        if (deviceData && !deviceData?.isApplyThreshold) {
+        if (deviceData && !deviceData?.isAppliedThreshold) {
             const rawLastValue = await getLastValueWithSensor(sensorId);
             if (rawLastValue && rawLastValue.EC === 0) {
                 if (rawLastValue.DT.isBelowLowerBound || rawLastValue.DT.isAboveUpperBound) {
@@ -283,10 +283,49 @@ const getLastDeviceCondition = async (DeviceId) => {
     }
 };
 
+const getPageOperationData = async (DeviceId, page, limit, start, end, operator, isNewest, state) => {
+    try {
+        let filter;
+        if (operator == '-1') filter = {};
+        else if (operator == '0') filter = { isAppliedSchedule : 1 };
+        else if (operator == '1') filter = { isAppliedThreshold : 1 };
+        else filter = { operatedBy : operator, isAppliedSchedule : 0, isAppliedThreshold : 0 };
+
+        if (state !== '-1') filter.state = +state;
+
+        let whereCondition;
+        if (start && end) whereCondition = { DeviceId, timestamp: { [Op.between]: [start, end] }, ...filter };
+        else if (start) whereCondition = { DeviceId, timestamp: { [Op.gte]: start }, ...filter };
+        else if (end) whereCondition = { DeviceId, timestamp: { [Op.lt]: end }, ...filter };
+        else whereCondition = { DeviceId, ...filter };
+        
+        const offset = (page - 1)*limit;
+        const { count, rows } = await db.OperationLog.findAndCountAll({
+            attributes: { exclude: ['id'] },
+            order: [['timestamp', isNewest === 'true' ? 'DESC' : 'ASC']],
+            where: whereCondition,
+            offset, limit, 
+            raw: true
+        });
+        if (rows) {
+            const data = rows.map((row) => ({ ...row, time: row.timestamp.toLocaleString() }));
+            const pageData = { numRow: count, numPage: Math.ceil(count/limit), data };
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: pageData
+            };
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr;
+    }
+};
+
 module.exports = { 
     getAllGarden, getLastValueWithSensor, getAllSensor, 
-    getSensorInfo, getDataChart, getPageData, getLastSensorValue,
+    getSensorInfo, getDataChart, getPageSensorData, getLastSensorValue,
     getThresholdValueBySensorId, updateThresholdOfSensor,  
-    getLastOutThreshold, getLastDeviceCondition
+    getLastOutThreshold, getLastDeviceCondition, getPageOperationData
 };
 

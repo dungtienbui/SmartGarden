@@ -3,7 +3,7 @@ import { webAxios } from '../utils/axios';
 const getdvcondition = async (gardenId, dvIds) => {
     let retData = [];
     if (gardenId == 1) {
-        const newestValue = await webAxios.get(`/control/device/data`, { params: { device: dvIds } });
+        const newestValue = await webAxios.get(`/device/data`, { params: { device: dvIds } });
         if (newestValue && +newestValue.EC === 0) {
             retData = newestValue.DT;
         }
@@ -16,7 +16,7 @@ const getdvcondition = async (gardenId, dvIds) => {
 const getdvappliedThreshold = async (gardenId, dvIds) => {
     let retData = 1;
     if (gardenId == 1) {
-        const newestValue = await webAxios.get(`/control/appliedTh/data`, { params: { device: dvIds } });
+        const newestValue = await webAxios.get(`/device/appliedTh/data`, { params: { device: dvIds } });
         if (newestValue && +newestValue.EC === 0) {
             retData = newestValue.DT;
         }
@@ -28,12 +28,12 @@ const getdvappliedThreshold = async (gardenId, dvIds) => {
 
 const changeappliedThreshold = async (device, value) => {
     console.log(device, value);
-    const x = await webAxios.post(`/control/appliedTh`, { device: device, value: value });
+    const x = await webAxios.post(`/device/appliedTh`, { device: device, value: value });
     return x;
 };
 
 const changedevice = async (device, value) => {
-    const x = await webAxios.post(`/control/device`, { device: device, value: value });
+    const x = await webAxios.post(`/device`, { device: device, value: value });
     return x;
 };
 

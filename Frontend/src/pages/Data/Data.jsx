@@ -68,17 +68,17 @@ function Data() {
     }, [gardenId]);
 
     return (
-        <div className="data-page h-100 px-3 position-relative">
+        <div className="data-page h-100 px-4 position-relative">
             <h3 className="title text-center py-3">Dữ liệu môi trường</h3>
             <div className="env-data px-3">
                 {envData.map((data, index) => (
-                    <div className="data-card d-flex p-3 my-2 justify-content-between rounded-4" key={index}>
+                    <div className="data-card d-flex p-3 justify-content-between rounded-4" key={index}>
                         <div className="data-info d-flex gap-4">
                             <div className="icon p-2 me-2 rounded-4">{data.icon}</div>
                             <div className="data">
                                 <h4 className="title mt-2 mb-4">{data.title}</h4>
-                                <p className="time d-inline">{data.time}</p>
-                                <p className="value d-inline ms-5 fs-3 text-danger">
+                                <p className="time d-inline text-secondary">{data.time}</p>
+                                <p className="value d-inline ms-5 text-danger">
                                     {data.value} {data.unit}
                                 </p>
                             </div>
@@ -94,7 +94,7 @@ function Data() {
                     </div>
                 ))}
             </div>
-            <LiveClock className={'fs-4 text-secondary text-end mt-3 me-2'} />
+            <LiveClock className={'fs-4 fw-normal text-secondary text-end mt-3 me-2'} />
         </div>
     );
 }

@@ -27,6 +27,7 @@ function Control() {
             condition: deviceState.den,
             threshold: appliedThreshold.den,
             icon: bulb,
+            color: '#FCA833',
             value: '0',
             total: '3',
         },
@@ -36,6 +37,7 @@ function Control() {
             condition: deviceState.maybom,
             threshold: appliedThreshold.maybom,
             icon: pump,
+            color: '#44C7FF',
             value: '0',
             total: '3',
         },
@@ -93,8 +95,8 @@ function Control() {
     };
 
     return (
-        <div className="control-page h-100 px-3 position-relative">
-            <h3 className="title fw-normal text-center py-3">Cài đặt lịch trình</h3>
+        <div className="control-page h-100 px-4 position-relative">
+            <h3 className="title text-center py-3">Cài đặt lịch trình</h3>
             <div className="env-control px-3">
                 {dvData.map((data, index) => (
                     <div key={index}>
@@ -102,17 +104,18 @@ function Control() {
                             <div className="bulb p-2">
                                 <div className="icon p-2 rounded-4">
                                     <img className="default-layout" src={data.icon} alt={data.title} />
-
-                                    <h4 className="title">{data.title}</h4>
+                                    <h4 className="title" style={{ color: data.color }}>
+                                        {data.title}
+                                    </h4>
                                 </div>
                                 {data.dvId === 'den' && (
                                     <div className="bulb-set">
-                                        <h5 className="title mt-1 mb-1">Cài đặt {data.title}</h5>
+                                        <h5 className="title mt-1 mb-1 fw-normal">Cài đặt {data.title}</h5>
                                     </div>
                                 )}
                             </div>
                             <div className="data ps-3">
-                                <div className="title line-bt1">
+                                <div className="title py-1 line-bt1">
                                     <div className="s">
                                         Trạng thái: {data.condition === 1 ? 'đang bật' : 'đang tắt'}
                                     </div>
@@ -126,7 +129,7 @@ function Control() {
                                         />
                                     </div>
                                 </div>
-                                <div className="title line-bt1">
+                                <div className="title py-1 line-bt1">
                                     <div className="s">
                                         Tự động bật/tắt {data.title} khi vượt ngưỡng:
                                         {data.threshold === 1 ? ' bật' : ' tắt'}
@@ -141,7 +144,7 @@ function Control() {
                                         />
                                     </div>
                                 </div>
-                                <div className="title">
+                                <div className="title py-1">
                                     <div className="s">
                                         Lịch trình: {data.value}/{data.total}
                                     </div>

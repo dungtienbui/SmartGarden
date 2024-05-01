@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { updateThresholdOfSensor } from '../../../services/thesholdService'
+import { updateThresholdOfSensor } from '../../../services/thesholdService';
 
 function ModalEditThreshold(prop) {
     const [show, setShow] = useState(false);
@@ -68,11 +68,7 @@ function ModalEditThreshold(prop) {
 
             if (newUpper != null || newLower != null) {
                 try {
-                    const response = await updateThresholdOfSensor(
-                        prop.objectSetting.sensorId,
-                        newUpper,
-                        newLower,
-                    );
+                    const response = await updateThresholdOfSensor(prop.objectSetting.sensorId, newUpper, newLower);
 
                     if (response === null) {
                         console.error('GardenId không hợp lệ.');
@@ -99,7 +95,7 @@ function ModalEditThreshold(prop) {
 
     return (
         <>
-            <Button variant="warning" onClick={handleShow}>
+            <Button variant="warning" style={{ fontSize: '1.1rem' }} onClick={handleShow}>
                 Chỉnh sửa
             </Button>
 

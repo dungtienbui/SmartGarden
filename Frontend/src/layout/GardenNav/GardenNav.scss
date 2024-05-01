@@ -1,6 +1,6 @@
 .garden-nav-container {
     height: 100%;
-    .nav {
+    > .nav {
         .link {
             width: max-content;
             color: #444;
@@ -23,7 +23,7 @@
             }
         }
     }
-    .content {
+    > .content {
         box-shadow: 5px 5px 15px 10px #00000022;
     }
 }

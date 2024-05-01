@@ -6,6 +6,7 @@ import Data from '../pages/Data/Data';
 import SensorData from '../pages/Data/SensorData/SensorData';
 import Control from '../pages/Control/Control';
 import Statistic from '../pages/Statistic/Statistic';
+import History from '../pages/Statistic/History/History';
 import Setting from '../pages/Setting/Setting';
 import SetGardenThreshold from '../pages/Setting/ThresholdSetting/SetGardenThreshold';
 import Login from '../pages/LoginRegister/Login';
@@ -32,9 +33,14 @@ const privateRoutes = [
     },
     {
         path: '/statistic',
-        component: () => <WrapPrivate children={<GardenNav children={<Statistic />} />} />,
+        component: () => <WrapPrivate children={<Statistic />} />,
         layout: DefaultLayout,
         title: 'THỐNG KÊ',
+    },
+    {
+        path: '/statistic/:id',
+        component: () => <WrapPrivate children={<GardenNav children={<History />} />} />,
+        layout: DefaultLayout,
     },
     {
         path: '/setting',

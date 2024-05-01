@@ -119,7 +119,7 @@ class sensorController {
         }
     }
 
-    async getPageData(req, res) {
+    async getPageSensorData(req, res) {
         try {
             const sensorId = req.params.sensorId;
             const { page, limit, from, to } = req.query;
@@ -134,7 +134,7 @@ class sensorController {
                     });
                 }
             }
-            const pageData = await webService.getPageData(sensorId, +page, +limit, start, end);
+            const pageData = await webService.getPageSensorData(sensorId, +page, +limit, start, end);
             if (pageData) {
                 return res.status(200).json({
                     EM: pageData.EM,
