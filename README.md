@@ -39,7 +39,9 @@ username: admin, password: 123456
 - Chạy lần đầu tiên:
 
   Tạo database mysql mới tên smartgarden
-  
+
+  Sửa mật khẩu database trong file config.json, connectDb.js
+
   npm i
   
   npx sequelize-cli db:migrate
