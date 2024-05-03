@@ -46,6 +46,7 @@ class deviceController {
             return res.status(500).json(serverErr1);
         }
     }
+
     async getDeviceAppliedTh(req, res) {
         try {      
             let ddata = 0
@@ -101,6 +102,36 @@ class deviceController {
         }
     }
 
+    async getBulbSetting(req, res) {
+        try {
+           const bulb = await webService.getBulbSetting();
+            if (bulb) {
+                return res.status(200).json({
+                    EM: bulb.EM,
+                    EC: bulb.EC,
+                    DT: bulb.DT
+                });
+            }
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    }
+
+    async setBulbSetting(req, res) {
+        try {
+            const bulb = await webService.setBulbSetting(req.body.color, req.body.intensity);
+            if (bulb) {
+                return res.status(200).json({
+                    EM: bulb.EM,
+                    EC: bulb.EC,
+                    DT: bulb.DT
+                });
+            }
+        } catch (err) {
+            return res.status(500).json(serverErr);
+        }
+    }
+    
 };
 
 export default new deviceController();

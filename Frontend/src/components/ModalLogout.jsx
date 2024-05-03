@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../services/userService';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { logout } from '../services/userService';
 
 function ModalLogout({ show, handleClose }) {
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ function ModalLogout({ show, handleClose }) {
     return (
         <Modal show={show} onHide={handleClose} centered size="sm" className="pb-5">
             <Modal.Header closeButton>
-                <Modal.Title className="text-center">Đăng xuất</Modal.Title>
+                <Modal.Title>Đăng xuất</Modal.Title>
             </Modal.Header>
             <Modal.Body>Bạn có muốn đăng xuất không ?</Modal.Body>
             <Modal.Footer>

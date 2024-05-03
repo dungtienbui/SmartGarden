@@ -72,12 +72,12 @@ function Login() {
                 <h1 className="text-white fw-normal display-5 mb-4">
                     Smart Garden <br /> App
                 </h1>
-                <NavLink to="/register" className="text-white text-decoration-none m-auto">
+                {/* <NavLink to="/register" className="text-white text-decoration-none m-auto">
                     <div className="button border rounded-pill d-flex gap-2 align-items-center border-3 px-5 py-2">
                         <p className="fw-bolder mb-1 ps-3">Đăng ký </p>
                         <FontAwesomeIcon icon={faArrowRight} className="icon pe-2" />
                     </div>
-                </NavLink>
+                </NavLink> */}
             </div>
             <div className="band2 bg-white m-auto py-5 row justify-content-end">
                 <div className="content col-5 px-2">
@@ -108,11 +108,11 @@ function Login() {
                                 onKeyDown={handleKeyDown}
                             />
                         </div>
-                        <div className="text-end">
+                        {/* <div className="text-end">
                             <button type="button" className="forgot-password mt-1 text-primary">
                                 Quên mật khẩu?
                             </button>
-                        </div>
+                        </div> */}
                         <button
                             type="button"
                             className="btn btn-success w-100 fw-bolder py-2 mt-3"

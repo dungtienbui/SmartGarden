@@ -56,6 +56,14 @@ const getPageOutThresholdData = async (gardenId, sensorId, page, limit, filterVa
     return;
 };
 
+const getBulbSetting = async () => {
+    return await webAxios.get('/device/setting/den');
+};
+
+const setBulbSetting = async (color, intensity) => {
+    return await webAxios.put('/device/setting/den', { color, intensity });
+};
+
 export {
     getAllGarden,
     getAllSensor,
@@ -64,4 +72,6 @@ export {
     getPageSensorData,
     getPageOperationData,
     getPageOutThresholdData,
+    getBulbSetting,
+    setBulbSetting,
 };

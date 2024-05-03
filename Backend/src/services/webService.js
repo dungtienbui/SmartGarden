@@ -147,14 +147,9 @@ const getThresholdValueBySensorId = async (SensorId) => {
     }
 };
 
-// in: SensorId, upperValue, lowerValue
-// update threshold value with SensorIdId
-// return: {message, code, data: rowAffected}
-// SensorId: nhietdo, doamdat, doamkk, anhsang
 const updateThresholdOfSensor = async (SensorId, newUpper, newLower) => {
     const existSensorId = ['nhietdo', 'doamdat', 'doamkk', 'anhsang']
     if (!existSensorId.includes(SensorId)){
-        console.log('not find SensorIdId');
         return {
             EM: 'Error: not find SensorIdId',
             EC: -2,
@@ -164,14 +159,12 @@ const updateThresholdOfSensor = async (SensorId, newUpper, newLower) => {
     try {
         let updatedUpper = null;
         let updatedLower = null;
-
         if (newUpper != null){
             updatedUpper = await db.Threshold.update({ upperBound: newUpper }, { where: { SensorId: SensorId}});
         }
         if (newLower != null){
             updatedLower = await db.Threshold.update({ lowerBound: newLower }, { where: { SensorId: SensorId}});
         }
-
         if (updatedUpper == null && updatedLower == null) {
             return {
                 EM: 'don\'t have updated: both newUpper is null and newLower is null',
@@ -197,7 +190,6 @@ const updateThresholdOfSensor = async (SensorId, newUpper, newLower) => {
                 DT: updatedUpper[0] + updatedLower[0]
             };
         }
-
     } catch (err) {
         console.log(err);
         return serviceErr;
@@ -358,6 +350,36 @@ const getPageOutThresholdData = async (SensorId, page, limit, start, end, sortNe
     } catch (err) {
         console.log(err);
         return serviceErr;
+    }    
+};
+
+const getBulbSetting = async () => {
+    try {
+        const bulb = await db.Lighting.findOne({ attributes: { exclude: ['id'] }, raw: true });
+        if (bulb) {
+            return {
+                EM: 'Get succeed',
+                EC: 0,
+                DT: bulb
+            };
+        }
+    } catch (err) {
+        console.log(err);
+        return serviceErr
+    }
+};
+
+const setBulbSetting = async (color, intensity) => {
+    try {
+        await db.Lighting.update({ color, intensity }, { where: { DeviceId: 'den' } });
+        return {
+            EM: 'Update succeed',
+            EC: 0,
+            DT: ''
+        };
+    } catch (err) {
+        console.log(err);
+        return serviceErr
     }
 };
 
@@ -366,6 +388,7 @@ module.exports = {
     getSensorInfo, getDataChart, getLastSensorValue,
     getThresholdValueBySensorId, updateThresholdOfSensor,  
     getLastOutThreshold, getLastDeviceCondition, 
-    getPageSensorData, getPageOperationData, getPageOutThresholdData
+    getPageSensorData, getPageOperationData, getPageOutThresholdData,
+    getBulbSetting, setBulbSetting
 };
 

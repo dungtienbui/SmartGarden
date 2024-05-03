@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import ModalLightSetting from '../../components/ModalLightSetting';
 import {
     getdvcondition,
     changedevice,
@@ -16,6 +17,9 @@ import './Control.scss';
 function Control() {
     const [searchParams] = useSearchParams();
     const gardenId = searchParams.get('gardenId');
+    const [showModal, setShowModal] = useState(false);
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     const [appliedThreshold, setAppliedThreshold] = useState({ den: 0, maybom: 0 });
     const [deviceState, setDeviceState] = useState({ den: 0, maybom: 0 });
@@ -59,14 +63,16 @@ function Control() {
     useEffect(() => {
         const dv = ['den', 'maybom'];
         let stopGetting = false;
+        let first = true;
         const getData = async () => {
             let data = { ...deviceState };
             for (let i = 0; i < dv.length; i++) {
                 const raw = await getdvcondition(gardenId, dv[i]);
                 data[dv[i]] = raw.state;
             }
-            if (!stopGetting && skip) {
+            if ((!stopGetting && skip) || first) {
                 setDeviceState(data);
+                if (first) first = false;
             }
         };
         getData();
@@ -109,7 +115,7 @@ function Control() {
                                     </h4>
                                 </div>
                                 {data.dvId === 'den' && (
-                                    <div className="bulb-set">
+                                    <div className="bulb-set" onClick={handleShow}>
                                         <h5 className="title mt-1 mb-1 fw-normal">Cài đặt {data.title}</h5>
                                     </div>
                                 )}
@@ -157,6 +163,7 @@ function Control() {
                     </div>
                 ))}
             </div>
+            <ModalLightSetting show={showModal} handleClose={handleClose} />
         </div>
     );
 }
