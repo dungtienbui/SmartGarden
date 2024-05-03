@@ -79,14 +79,14 @@ function ModalEditThreshold(prop) {
                     console.error('Đã xảy ra lỗi khi cập nhật ngưỡng ánh sáng:', err);
                 }
 
-                console.log(prop.toggleEditValue);
+                // console.log(prop.toggleEditValue);
 
                 if (prop.toggleEditValue == false) {
                     prop.setToggleEditValue(true);
                 } else {
                     prop.setToggleEditValue(false);
                 }
-                console.log(prop.toggleEditValue);
+                // console.log(prop.toggleEditValue);
             }
 
             handleClose();
