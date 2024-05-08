@@ -60,36 +60,28 @@ function Control() {
         getIsAppliedThreshold();
     }, [gardenId]);
 
-    useEffect(() => {
+    const getData = async () => {
         const dv = ['den', 'maybom'];
-        let stopGetting = false;
-        let first = true;
-        const getData = async () => {
-            let data = { ...deviceState };
-            for (let i = 0; i < dv.length; i++) {
-                const raw = await getdvcondition(gardenId, dv[i]);
-                data[dv[i]] = raw.state;
-            }
-            if ((!stopGetting && skip) || first) {
-                setDeviceState(data);
-                if (first) first = false;
-            }
-        };
+        let data = { ...deviceState };
+        for (let i = 0; i < dv.length; i++) {
+            const raw = await getdvcondition(gardenId, dv[i]);
+            data[dv[i]] = raw.state;
+        }
+        if (!skip) setDeviceState(data);
+    };
+
+    useEffect(() => {
         getData();
         const intervalId = setInterval(() => getData(), 2000);
-        return () => {
-            clearInterval(intervalId);
-            setDeviceState({ den: 0, maybom: 0 });
-            stopGetting = true;
-        };
-    }, [gardenId]);
+        return () => clearInterval(intervalId);
+    }, [gardenId, skip]);
 
     const handleClick1 = async (dvId) => {
         const updatedCondition = { ...deviceState };
         updatedCondition[dvId] = 1 - updatedCondition[dvId];
         setSkip(true);
         setDeviceState(updatedCondition);
-        setSkip(false);
+        setTimeout(() => setSkip(false), 6000);
         await changedevice(dvId, updatedCondition[dvId]);
     };
 
