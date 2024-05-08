@@ -8,7 +8,7 @@ function ModalLightSetting({ show, handleClose }) {
     const [unit, setUnit] = useState('');
     const [settingValue, setSettingValue] = useState({ color: '', intensity: 0 });
 
-    const colors = ['#f6f6f6', '#a9ffa9', '#fbee77', '#ffa9aa', '#96d6ff'];
+    const colors = ['#ffffff', '#ff0000', '#00ff00', '#ffff00', '#0000ff'];
     const handleSubmit = async () => {
         if (settingValue.intensity > 2000) alert('Cường độ ánh sáng không được lớn hơn 2000 ' + unit);
         await setBulbSetting(settingValue.color, settingValue.intensity);
@@ -41,12 +41,14 @@ function ModalLightSetting({ show, handleClose }) {
                             {colors.map((color, index) => (
                                 <div
                                     className={
-                                        color === settingValue.color ||
-                                        (color === '#f6f6f6' && settingValue.color === '#ffffff')
+                                        color === settingValue.color
                                             ? 'p-3 rounded border border-2 border-secondary'
                                             : 'p-3 rounded border border-2 border-white'
                                     }
-                                    style={{ backgroundColor: color, cursor: 'pointer' }}
+                                    style={{
+                                        backgroundColor: color === '#ffffff' ? '#f6f6f6' : color,
+                                        cursor: 'pointer',
+                                    }}
                                     key={index}
                                     onClick={() => setSettingValue({ ...settingValue, color: colors[index] })}
                                 ></div>

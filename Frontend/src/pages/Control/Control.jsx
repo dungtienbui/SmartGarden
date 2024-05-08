@@ -142,14 +142,14 @@ function Control() {
                                         />
                                     </div>
                                 </div>
-                                <div className="title py-1">
+                                {/* <div className="title py-1">
                                     <div className="s">
                                         Lịch trình: {data.value}/{data.total}
                                     </div>
                                     <div className="t m-md-3 d-flex align-items-center justify-content-center">
                                         Thiết lập
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

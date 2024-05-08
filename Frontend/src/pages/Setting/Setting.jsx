@@ -12,9 +12,9 @@ function Setting() {
                 <button className="FeatureBox" onClick={() => navigate('/setting/threshold-setting?gardenId=1')}>
                     Cài đặt giá trị ngưỡng
                 </button>
-                <button className="FeatureBox" onClick={() => navigate('/setting/account-settings')}>
+                {/* <button className="FeatureBox" onClick={() => navigate('/setting/account-settings')}>
                     Cài đặt tài khoản
-                </button>
+                </button> */}
             </div>
         </div>
     );
