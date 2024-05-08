@@ -27,12 +27,12 @@ const saveNewestData = async () => {
                     if (sensorId === 'anhsang') {
                         if (den.isAppliedThreshold) {
                             const postState = isBelowLowerBound ? 1 : 0;
-                            await postDeviceCondition('den', postState);
+                            postDeviceCondition('den', postState);
                         }
                     } else if (sensorId === 'doamdat') {
                         if (maybom.isAppliedThreshold) {
                             const postState = isBelowLowerBound ? 1 : 0;
-                            await postDeviceCondition('maybom', postState);
+                            postDeviceCondition('maybom', postState);
                         }
                     }
                 }
@@ -90,4 +90,15 @@ const postDeviceCondition = async (device, value) => {
     }
 };
 
-module.exports = { updateData, getDeviceCondition, postDeviceCondition };
+const postLightColor = async (color) => {
+    try {
+        const data = { value: color };
+        await axios.post('/mau/data', data, { params: { 'x-aio-key': key } });
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+
+
+module.exports = { updateData, getDeviceCondition, postDeviceCondition, postLightColor };

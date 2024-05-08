@@ -120,6 +120,7 @@ class deviceController {
     async setBulbSetting(req, res) {
         try {
             const bulb = await webService.setBulbSetting(req.body.color, req.body.intensity);
+            adafruitService.postLightColor(req.body.color);
             if (bulb) {
                 return res.status(200).json({
                     EM: bulb.EM,

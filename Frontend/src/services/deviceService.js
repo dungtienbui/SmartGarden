@@ -27,14 +27,11 @@ const getdvappliedThreshold = async (gardenId, dvIds) => {
 };
 
 const changeappliedThreshold = async (device, value) => {
-    console.log(device, value);
-    const x = await webAxios.post(`/device/appliedTh`, { device: device, value: value });
-    return x;
+    await webAxios.post(`/device/appliedTh`, { device: device, value: value });
 };
 
 const changedevice = async (device, value) => {
-    const x = await webAxios.post(`/device`, { device: device, value: value });
-    return x;
+    await webAxios.post(`/device`, { device: device, value: value });
 };
 
 export { getdvcondition, changedevice, getdvappliedThreshold, changeappliedThreshold };

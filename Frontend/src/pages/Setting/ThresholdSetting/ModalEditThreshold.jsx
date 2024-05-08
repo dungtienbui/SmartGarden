@@ -60,8 +60,6 @@ function ModalEditThreshold(prop) {
     useEffect(checkConstraints, [upperBound, lowerBound]);
 
     const handleSave = async () => {
-        // console.log(isMax && isMin && minMaxConstraint && false)
-        // console.log(isMax && isMin && minMaxConstraint)
         if (isMax && isMin && minMaxConstraint && !isEmptyInput) {
             let newUpper = upperBound != prop.objectSetting.currUpper ? upperBound : null;
             let newLower = lowerBound != prop.objectSetting.currLower ? lowerBound : null;
@@ -79,14 +77,11 @@ function ModalEditThreshold(prop) {
                     console.error('Đã xảy ra lỗi khi cập nhật ngưỡng ánh sáng:', err);
                 }
 
-                // console.log(prop.toggleEditValue);
-
                 if (prop.toggleEditValue == false) {
                     prop.setToggleEditValue(true);
                 } else {
                     prop.setToggleEditValue(false);
                 }
-                // console.log(prop.toggleEditValue);
             }
 
             handleClose();
@@ -147,7 +142,6 @@ function ModalEditThreshold(prop) {
                                         if (/^0$|^-?[1-9][0-9]*$|^$/.test(inputValue)) {
                                             // Kiểm tra nếu giá trị chỉ chứa số nguyên
                                             setUpperBound(inputValue); // Cập nhật giá trị
-                                            // console.log(parseInt(upperBound));
                                         }
                                     }}
                                 />
@@ -174,7 +168,6 @@ function ModalEditThreshold(prop) {
                                         if (/^-?\d*$/.test(inputValue)) {
                                             // Kiểm tra nếu giá trị chỉ chứa số nguyên
                                             setLowerBound(inputValue); // Cập nhật giá trị
-                                            // console.log(parseInt(lowerBound));
                                         }
                                     }}
                                 />

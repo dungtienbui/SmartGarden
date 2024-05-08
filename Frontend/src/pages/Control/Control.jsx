@@ -76,20 +76,20 @@ function Control() {
         return () => clearInterval(intervalId);
     }, [gardenId, skip]);
 
-    const handleClick1 = async (dvId) => {
+    const handleClick1 = (dvId) => {
         const updatedCondition = { ...deviceState };
         updatedCondition[dvId] = 1 - updatedCondition[dvId];
         setSkip(true);
         setDeviceState(updatedCondition);
         setTimeout(() => setSkip(false), 6000);
-        await changedevice(dvId, updatedCondition[dvId]);
+        changedevice(dvId, updatedCondition[dvId]);
     };
 
-    const handleClick2 = async (dvId) => {
+    const handleClick2 = (dvId) => {
         const updatedThreshold = { ...appliedThreshold };
         updatedThreshold[dvId] = 1 - updatedThreshold[dvId];
         setAppliedThreshold(updatedThreshold);
-        await changeappliedThreshold(dvId, updatedThreshold[dvId]);
+        changeappliedThreshold(dvId, updatedThreshold[dvId]);
     };
 
     return (
