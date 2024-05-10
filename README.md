@@ -20,7 +20,7 @@ username: admin, password: 123456
 ## Tecnology:
 
 - Desktop Web (used in chrome): MySql + ExpressJS + React + Node.js
-- Adafuit
+- Adafruit
 
 ## Design:
 - UI design: https://www.figma.com/file/rIHTS7cI6pq2sPxIPexZmh/Untitled?type=design&node-id=0-1&mode=design&t=FJj0qdtuMxXUpYBe-0
