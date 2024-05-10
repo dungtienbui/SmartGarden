@@ -4,6 +4,13 @@
 
 username: admin, password: 123456
 
+## Member:
+- Dung (Leader) (Me)
+- Cuong
+- Quoc Huy
+- Cong Huy
+- Nam
+
 ## Devices is supplied:
 
 - 1 temperature, 1 light intensive, 1 humidity, 1 soil moistur sensor.
@@ -15,13 +22,9 @@ username: admin, password: 123456
 - Desktop Web (used in chrome): MySql + ExpressJS + React + Node.js
 - Adafuit
 
-## Member:
-
-- Dung
-- Cuong
-- Quoc Huy
-- Cong Huy
-- Nam
+## Design:
+- UI design: https://www.figma.com/file/rIHTS7cI6pq2sPxIPexZmh/Untitled?type=design&node-id=0-1&mode=design&t=FJj0qdtuMxXUpYBe-0
+- Database design: https://dbdiagram.io/d/do-an-da-nganh-66013cd3ae072629cede9fef
 
 ## Main features:
 
@@ -39,9 +42,7 @@ username: admin, password: 123456
 - Chạy lần đầu tiên:
 
   Tạo database mysql mới tên smartgarden
-
-  Sửa mật khẩu database trong file config.json, connectDb.js
-
+  
   npm i
   
   npx sequelize-cli db:migrate
