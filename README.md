@@ -1,11 +1,10 @@
 # SmartGarden (Demo)
 
 -> IoT farm.
+-> Account: username: admin, password: 123456
 
 # Report
 - Link: https://drive.google.com/file/d/1Bft7puH7QgnrsVfzEPNaXt2tx-9r-LsD/view?usp=sharing
-
-username: admin, password: 123456
 
 ## Member:
 - Dung (Leader) (Me)
